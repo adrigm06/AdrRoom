@@ -1,0 +1,251 @@
+.room-experience {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  color: #f1eee6;
+  background-color: #171916;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+.room-experience::before {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background: linear-gradient(0deg, #11140f30 0%, transparent 24%);
+  content: '';
+  pointer-events: none;
+  transition: opacity 220ms ease;
+}
+
+.room-experience--focused::before {
+  opacity: 0;
+}
+
+.room-experience__canvas,
+.room-experience__canvas > div {
+  position: absolute;
+  inset: 0;
+}
+
+.room-experience__canvas canvas {
+  display: block;
+  touch-action: none;
+}
+
+.room-header {
+  position: absolute;
+  z-index: 3;
+  inset: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28px 38px;
+  pointer-events: none;
+}
+
+.room-wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  text-decoration: none;
+  pointer-events: auto;
+}
+
+.room-wordmark__symbol {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border: 1px solid #e8d8b9a8;
+  border-radius: 50%;
+  color: #edcf98;
+  font-family: Georgia, serif;
+  font-size: 17px;
+  font-style: italic;
+}
+
+.room-language {
+  display: inline-flex;
+  gap: 3px;
+  padding: 3px;
+  border: 1px solid #f2eee533;
+  background: #17191688;
+  pointer-events: auto;
+}
+
+.room-language button {
+  min-width: 36px;
+  padding: 6px 8px;
+  border: 0;
+  color: #ddd9cf;
+  background: transparent;
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.room-language button[aria-pressed='true'] {
+  color: #171916;
+  background: #edcf98;
+}
+
+.room-language button:focus-visible,
+.room-skip:focus-visible,
+.room-return:focus-visible,
+.room-wordmark:focus-visible {
+  outline: 2px solid #d3b987;
+  outline-offset: 4px;
+}
+
+.room-hint {
+  position: absolute;
+  z-index: 3;
+  bottom: 32px;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  transform: translateX(-50%);
+  color: #e1ded4;
+  font-size: 12px;
+  text-shadow: 0 1px 10px #111;
+  pointer-events: none;
+}
+
+.room-hint__icon {
+  color: #d3b987;
+  font-size: 18px;
+}
+
+.room-skip,
+.room-return {
+  position: absolute;
+  z-index: 3;
+  right: 38px;
+  bottom: 29px;
+  padding: 11px 15px;
+  border: 1px solid #f2eee566;
+  border-radius: 2px;
+  color: #f2eee5;
+  background: #171916bb;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 160ms ease, border-color 160ms ease;
+}
+
+.room-skip:hover,
+.room-return:hover {
+  border-color: #d3b98799;
+  background: #171916ee;
+}
+
+.room-loader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 230px;
+  padding: 13px 16px;
+  border: 1px solid #fff2;
+  color: #f1eee6;
+  background: #171916df;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.room-loading-overlay {
+  position: absolute;
+  z-index: 4;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.room-loader__mark {
+  width: 10px;
+  height: 10px;
+  border: 1px solid #d3b987;
+  border-radius: 50%;
+  animation: room-pulse 1.3s ease-in-out infinite alternate;
+}
+
+.room-loader__progress {
+  margin-left: auto;
+  color: #d3b987;
+  font-variant-numeric: tabular-nums;
+}
+
+.room-fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  gap: 12px;
+  color: #f1eee6;
+  background: #171916;
+  text-align: center;
+}
+
+.room-fallback img {
+  width: min(80vw, 900px);
+  max-height: 68vh;
+  object-fit: contain;
+}
+
+.room-fallback p {
+  margin: 0;
+  font-size: 13px;
+}
+
+.room-screen {
+  width: 1280px;
+  height: 712.3px;
+  overflow: hidden;
+  color: #fff;
+  background: #111;
+  pointer-events: auto;
+  contain: layout paint;
+}
+
+@keyframes room-pulse {
+  to { opacity: 0.42; transform: scale(0.75); }
+}
+
+@media (max-width: 760px) {
+  .room-header {
+    padding: 20px;
+  }
+
+  .room-hint {
+    bottom: 25px;
+    left: 20px;
+    transform: none;
+    font-size: 11px;
+  }
+
+  .room-skip,
+  .room-return {
+    right: 20px;
+    bottom: 17px;
+    padding: 10px 11px;
+    font-size: 11px;
+  }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .room-loader__mark {
+    animation: none;
+  }
+
+  .room-experience::before,
+  .room-skip,
+  .room-return {
+    transition: none;
+  }
+}

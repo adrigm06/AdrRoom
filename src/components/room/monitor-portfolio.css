@@ -1,0 +1,232 @@
+.monitor-portfolio {
+  display: flex;
+  width: 1280px;
+  height: 712px;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: 35px 54px 25px;
+  color: #eee9de;
+  background:
+    radial-gradient(ellipse at 78% 42%, #525648 0%, transparent 44%),
+    #171916;
+  font-family: Inter, Arial, sans-serif;
+}
+
+.monitor-portfolio__topbar,
+.monitor-portfolio__brand,
+.monitor-portfolio__status,
+.monitor-portfolio__footer {
+  display: flex;
+  align-items: center;
+}
+
+.monitor-portfolio__topbar,
+.monitor-portfolio__footer {
+  justify-content: space-between;
+}
+
+.monitor-portfolio__brand {
+  gap: 10px;
+  color: inherit;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  text-decoration: none;
+}
+
+.monitor-portfolio__mark {
+  display: grid;
+  width: 29px;
+  height: 29px;
+  place-items: center;
+  border: 1px solid #d5bf91;
+  border-radius: 50%;
+  color: #edcf98;
+  font-family: Georgia, serif;
+  font-size: 18px;
+  font-style: italic;
+}
+
+.monitor-portfolio__status {
+  gap: 9px;
+  color: #b9b8ad;
+  font-size: 10px;
+  letter-spacing: 0.13em;
+}
+
+.monitor-portfolio__status > span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #9daf8b;
+  box-shadow: 0 0 12px #9daf8b88;
+}
+
+.monitor-portfolio__content {
+  display: grid;
+  flex: 1;
+  grid-template-columns: 1fr 0.83fr;
+  align-items: center;
+  gap: 54px;
+  padding: 13px 0 20px;
+}
+
+.monitor-portfolio__label {
+  margin: 0 0 15px;
+  color: #d3b987;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.monitor-portfolio__intro h1 {
+  max-width: 540px;
+  margin: 0;
+  font-family: Georgia, serif;
+  font-size: 57px;
+  font-weight: 400;
+  letter-spacing: -0.055em;
+  line-height: 1.02;
+}
+
+.monitor-portfolio__description {
+  max-width: 430px;
+  margin: 21px 0 28px;
+  color: #c4c2b9;
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+.monitor-portfolio__action {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 22px;
+  padding: 0 17px;
+  border: 1px solid #d3b9878c;
+  color: #f1eee6;
+  font-size: 12px;
+  text-decoration: none;
+  transition: background-color 160ms ease, border-color 160ms ease;
+}
+
+.monitor-portfolio__action:hover {
+  border-color: #d3b987;
+  background: #d3b98718;
+}
+
+.monitor-portfolio__action:focus-visible {
+  outline: 2px solid #edcf98;
+  outline-offset: 3px;
+}
+
+.monitor-portfolio__action span {
+  color: #edcf98;
+  font-size: 16px;
+}
+
+.monitor-portfolio__card {
+  overflow: hidden;
+  border: 1px solid #eee9de2c;
+  background: #22251f;
+}
+
+.monitor-portfolio__card-art {
+  position: relative;
+  display: grid;
+  height: 270px;
+  overflow: hidden;
+  place-items: center;
+  background:
+    linear-gradient(180deg, transparent 45%, #171916a8),
+    linear-gradient(135deg, #505747, #252920 67%);
+}
+
+.monitor-portfolio__sun {
+  position: absolute;
+  top: 38px;
+  right: 65px;
+  width: 85px;
+  height: 85px;
+  border-radius: 50%;
+  background: #d6b982;
+  box-shadow: 0 0 70px #d6b98266;
+}
+
+.monitor-portfolio__window {
+  position: absolute;
+  right: 90px;
+  bottom: -18px;
+  display: flex;
+  width: 225px;
+  height: 210px;
+  justify-content: space-between;
+  padding: 0 12px;
+  border: 8px solid #292b24;
+  border-bottom: 0;
+  background: linear-gradient(180deg, #a5a88e 0%, #747967 60%, #42483c 100%);
+  box-shadow: inset 0 0 45px #25292055, 0 0 0 1px #d8ccb366;
+}
+
+.monitor-portfolio__window span {
+  width: 2px;
+  height: 100%;
+  background: #292b24;
+}
+
+.monitor-portfolio__card-mark {
+  z-index: 1;
+  display: grid;
+  width: 91px;
+  height: 91px;
+  place-items: center;
+  border: 1px solid #f2e8d655;
+  border-radius: 50%;
+  color: #f0dfbc;
+  font-family: Georgia, serif;
+  font-size: 49px;
+  font-style: italic;
+  text-shadow: 0 2px 18px #171916;
+  transform: translate(-93px, -6px);
+}
+
+.monitor-portfolio__card-copy {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 21px 22px 23px;
+}
+
+.monitor-portfolio__card-copy .monitor-portfolio__label {
+  margin-bottom: 7px;
+  font-size: 9px;
+}
+
+.monitor-portfolio__card-copy h2 {
+  margin: 0;
+  font-family: Georgia, serif;
+  font-size: 26px;
+  font-weight: 400;
+}
+
+.monitor-portfolio__card-copy > p {
+  max-width: 180px;
+  margin: 0;
+  color: #b8b6ad;
+  font-size: 10px;
+  line-height: 1.5;
+  text-align: right;
+}
+
+.monitor-portfolio__footer {
+  min-height: 30px;
+  border-top: 1px solid #eee9de22;
+  color: #aaa99e;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+}
+
+.monitor-portfolio__footer span:last-child {
+  letter-spacing: 0;
+}

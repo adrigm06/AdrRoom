@@ -1,0 +1,23 @@
+---
+import '@/styles/room-global.css';
+import RoomExperience from '@/components/room/RoomExperience';
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#171916" />
+    <meta
+      name="description"
+      content="Explore AdrRoom, an interactive 3D portfolio in Spanish and English."
+    />
+    <title>AdrRoom — Interactive portfolio</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preload" href="/room-preview.png" as="image" />
+  </head>
+  <body>
+    <RoomExperience client:load />
+  </body>
+</html>

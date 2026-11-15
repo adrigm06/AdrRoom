@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="712" viewBox="0 0 1280 712">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#343a31"/>
+      <stop offset="1" stop-color="#171916"/>
+    </linearGradient>
+    <radialGradient id="sun">
+      <stop stop-color="#d6b982" stop-opacity=".5"/>
+      <stop offset="1" stop-color="#d6b982" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1280" height="712" fill="url(#bg)"/>
+  <circle cx="1000" cy="308" r="300" fill="url(#sun)"/>
+  <circle cx="1017" cy="194" r="50" fill="#d6b982"/>
+  <path d="M820 532V275h220v257" fill="#777d6b" stroke="#292b24" stroke-width="16"/>
+  <path d="M894 275v257m72-257v257" stroke="#292b24" stroke-width="8"/>
+  <circle cx="760" cy="345" r="55" fill="none" stroke="#f0dfbc" stroke-opacity=".65"/>
+  <text x="760" y="362" fill="#f0dfbc" font-family="Georgia,serif" font-size="58" font-style="italic" text-anchor="middle">a</text>
+  <text x="82" y="94" fill="#edcf98" font-family="Arial,sans-serif" font-size="24" letter-spacing="4">ADRROOM · INTERACTIVE PORTFOLIO</text>
+  <text x="82" y="312" fill="#eee9de" font-family="Georgia,serif" font-size="76">Welcome to AdrRoom.</text>
+  <text x="84" y="370" fill="#c4c2b9" font-family="Arial,sans-serif" font-size="25">A 3D room to explore.</text>
+  <text x="82" y="624" fill="#d3b987" font-family="Arial,sans-serif" font-size="18" letter-spacing="3">BLENDER · 3D WEB · INTERACTION</text>
+</svg>
