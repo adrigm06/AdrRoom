@@ -1,0 +1,318 @@
+/* Recruiter Mode is a scoped editorial surface; the OS keeps its own theme. */
+.recruiter-dialog {
+  --tour-bg: #f6f2e9;
+  --tour-surface: #fffdf8;
+  --tour-ink: #272b24;
+  --tour-secondary: #62665d;
+  --tour-line: #d9d8cb;
+  --tour-accent: #345b43;
+  --tour-android: #37694a;
+  --tour-komea: #9a4d25;
+  --tour-avisia: #315b8b;
+  --tour-android-canvas: #c9dea8;
+  --tour-komea-canvas: #f2cd9b;
+  --tour-avisia-canvas: #a9c7e8;
+  color-scheme: light;
+  position: fixed; inset: 0; width: 100%; max-width: none; height: 100dvh; max-height: none;
+  margin: 0; padding: 0; border: 0; background: var(--tour-bg); color: var(--tour-ink);
+  font-family: var(--font-sans); text-align: left;
+}
+.recruiter-dialog::backdrop { background: var(--tour-bg); }
+.recruiter-shell { display: flex; flex-direction: column; height: 100%; overflow: hidden; }
+.recruiter-dialog button, .recruiter-dialog a { -webkit-tap-highlight-color: transparent; }
+.recruiter-dialog button { font: inherit; cursor: pointer; border: 0; background: none; color: inherit; }
+.recruiter-dialog a { color: inherit; text-decoration: none; }
+.recruiter-dialog button:focus-visible, .recruiter-dialog a:focus-visible { outline: 2px solid var(--tour-accent); outline-offset: 5px; border-radius: 2px; }
+.recruiter-dialog button:disabled { opacity: 0.38; cursor: default; }
+.recruiter-dialog button:not(:disabled):active { transform: scale(0.98); }
+.recruiter-bar { flex-shrink: 0; min-height: 56px; padding: 12px clamp(22px, 4vw, 64px); display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.recruiter-brand { font-size: 13px; font-weight: 650; white-space: nowrap; }
+.recruiter-brand > span { margin-left: 8px; font-weight: 400; color: var(--tour-secondary); }
+.recruiter-bar-actions { display: flex; align-items: center; gap: 28px; font-size: 12px; }
+.recruiter-bar .recruiter-exit { display: flex; align-items: center; gap: 12px; }
+.recruiter-bar .recruiter-exit > span { font-size: 20px; }
+.recruiter-pages { flex: 1; min-height: 0; display: flex; flex-direction: column; position: relative; isolation: isolate; }
+.recruiter-pages::before, .recruiter-pages::after { content: ''; position: absolute; inset: 0; pointer-events: none; }
+/* Static colour and a fading drafting grid add depth without distracting motion. */
+.recruiter-pages::before {
+  z-index: -2;
+  background:
+    radial-gradient(ellipse 62% 64% at 3% 14%, color-mix(in srgb, var(--tour-canvas) 42%, transparent), transparent 74%),
+    radial-gradient(ellipse 46% 52% at 98% 92%, color-mix(in srgb, var(--tour-project) 7%, transparent), transparent 76%);
+}
+.recruiter-pages::after {
+  z-index: -1;
+  background-image: linear-gradient(color-mix(in srgb, var(--tour-ink) 5%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--tour-ink) 5%, transparent) 1px, transparent 1px);
+  background-size: 44px 44px;
+  -webkit-mask-image: radial-gradient(ellipse 70% 65% at 45% 40%, var(--tour-ink) 12%, transparent 82%);
+  mask-image: radial-gradient(ellipse 70% 65% at 45% 40%, var(--tour-ink) 12%, transparent 82%);
+}
+.recruiter-pages[data-project="android"], .recruiter-android { --tour-project: var(--tour-android); --tour-canvas: var(--tour-android-canvas); }
+.recruiter-pages[data-project="komea"], .recruiter-komea { --tour-project: var(--tour-komea); --tour-canvas: var(--tour-komea-canvas); }
+.recruiter-pages[data-project="avisia"], .recruiter-avisia { --tour-project: var(--tour-avisia); --tour-canvas: var(--tour-avisia-canvas); }
+.recruiter-pagination-header { flex-shrink: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 0 28px; padding: 0 22px; border-bottom: 1px solid var(--tour-line); }
+.recruiter-project-tabs { display: flex; flex: 1 1 100%; min-width: 0; gap: 18px; }
+.recruiter-project-tabs button { display: flex; flex: 1; align-items: center; min-height: 44px; padding: 10px 0; border-bottom: 2px solid transparent; font-size: 11px; text-align: left; line-height: 1.4; }
+.recruiter-project-tabs button:first-child { flex: 1.7; }
+.recruiter-project-tabs button > span:first-child { display: none; }
+.recruiter-project-tabs button[aria-current="page"] { border-color: var(--tour-project); color: var(--tour-project); font-weight: 650; }
+.recruiter-project-actions { display: flex; gap: 24px; margin-left: auto; }
+.recruiter-project-actions button { min-height: 38px; font-size: 11px; }
+.recruiter-project-actions button > span { margin-left: 6px; }
+.recruiter-project-page { flex: 1; min-height: 0; overflow: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: var(--tour-line) var(--tour-bg); }
+.recruiter-section { width: min(1320px, calc(100% - 44px)); margin-inline: auto; padding: 32px 0 24px; outline: none; }
+.recruiter-eyebrow { margin: 0; font-size: 11px; line-height: 1.6; font-weight: 500; }
+.recruiter-section-heading { margin-bottom: 30px; }
+.recruiter-section-number, .recruiter-section-heading .recruiter-eyebrow { display: none; }
+.recruiter-section h2 { font-family: Georgia, 'Times New Roman', serif; font-size: clamp(33px, 4.3vw, 48px); font-weight: 400; letter-spacing: -0.035em; line-height: 1.1; max-width: 1050px; margin: 0; text-wrap: balance; }
+.recruiter-section h2:focus { outline: none; }
+.recruiter-project-body, .recruiter-visual-column { min-width: 0; }
+.recruiter-stage { position: relative; isolation: isolate; overflow: hidden; border: 0; border-radius: 8px; background: var(--tour-canvas); }
+.recruiter-stage::before { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(ellipse 85% 72% at 4% 0%, color-mix(in srgb, var(--tour-surface) 30%, transparent), transparent 76%); }
+.recruiter-stage-top, .recruiter-stage-status { display: none; }
+.recruiter-scene {
+  --device-frame: #29352f;
+  --device-bg: #fcfbf6;
+  --device-card: #f0f1e7;
+  --device-ink: #2d3b30;
+  --device-secondary: #626e61;
+  --device-line: #cdd3c5;
+  --device-accent: #3c6946;
+  --device-accent-soft: #e0ead5;
+  --device-tomato: #e66b51;
+  --device-leaf: #4f7f4a;
+  height: 548px; display: flex; justify-content: center; align-items: center; position: relative;
+}
+.recruiter-stage-caption { display: flex; align-items: center; justify-content: center; padding: 0 18px 18px; min-height: 40px; color: var(--tour-ink); text-align: center; }
+.recruiter-stage-caption > span { display: none; }
+.recruiter-stage-caption p { margin: 0; font-size: 12px; line-height: 1.4; font-weight: 500; }
+.recruiter-scene-controls { padding: 14px 0 8px; display: flex; justify-content: space-between; gap: 14px; font-size: 11px; }
+.recruiter-scene-controls > div { display: flex; gap: 22px; }
+.recruiter-scene-controls > button { color: var(--tour-project); }
+.recruiter-disclaimer { font-size: 10px; line-height: 1.7; color: var(--tour-secondary); margin: 10px 0 32px; max-width: 58ch; }
+.recruiter-case { scroll-margin-top: 24px; outline: none; background: var(--tour-surface); border-radius: 12px; padding: 0 24px 12px; }
+.recruiter-case:focus-visible { outline: 2px solid var(--tour-project); outline-offset: 5px; }
+.recruiter-case-row { display: grid; gap: 14px; padding: 28px 0; border-top: 1px solid var(--tour-line); }
+.recruiter-case-row h3 { font-size: 15px; line-height: 1.3; font-weight: 650; margin: 0; }
+.recruiter-case-row h3 > span { display: none; }
+.recruiter-case-row > p { font-size: 15px; line-height: 1.85; max-width: 58ch; color: var(--tour-secondary); margin: 0; text-wrap: pretty; }
+.recruiter-case-result > p { color: var(--tour-ink); }
+.recruiter-case-limitations > p { font-size: 14px; }
+.recruiter-evidence { display: flex; flex-direction: column; gap: 20px; padding: 28px 0; border-top: 1px solid var(--tour-line); }
+.recruiter-evidence > span { font-size: 10px; font-weight: 600; letter-spacing: 0.06em; color: var(--tour-secondary); }
+.recruiter-evidence > div { display: flex; flex-wrap: wrap; gap: 22px; }
+.recruiter-evidence a { font-size: 12px; border-bottom: 1px solid var(--tour-project); padding-bottom: 5px; }
+.recruiter-evidence a span { margin-left: 8px; }
+.recruiter-pager { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-shrink: 0; padding: 10px 22px max(10px, env(safe-area-inset-bottom)); min-height: 64px; border-top: 1px solid var(--tour-line); background: var(--tour-bg); }
+.recruiter-pager button { min-height: 40px; display: flex; gap: 14px; align-items: center; font-size: 12px; font-weight: 500; }
+.recruiter-pager button > span { font-size: 23px; color: var(--tour-project); }
+.recruiter-page-status { margin: 0; text-align: center; }
+.recruiter-page-status > span { font: 11px var(--font-mono); color: var(--tour-secondary); white-space: nowrap; }
+.recruiter-page-status > strong { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.recruiter-loading { padding: 70px 24px; text-align: center; color: var(--tour-secondary); }
+
+/* Shared device chrome. Illustrations are HTML/SVG, not raster screenshots. */
+.recruiter-phone { width: 286px; height: 510px; padding: 8px; border: 1px solid var(--device-line); background: var(--device-frame); border-radius: 38px; box-shadow: 9px 14px 0 color-mix(in srgb, var(--tour-project) 14%, transparent); position: relative; z-index: 2; flex-shrink: 0; }
+.recruiter-phone-screen { position: relative; height: 100%; overflow: hidden; background: var(--device-bg); border-radius: 30px; }
+.recruiter-phone-hardware { height: 35px; padding: 8px 15px; display: flex; align-items: center; justify-content: space-between; font-family: var(--font-mono); font-size: 9px; }
+.recruiter-phone-hardware > i { width: 72px; height: 16px; border-radius: 20px; background: var(--device-frame); border: 1px solid var(--device-line); position: absolute; left: 50%; transform: translateX(-50%); top: 8px; }
+.recruiter-home-indicator { width: 75px; height: 4px; background: currentColor; opacity: 0.3; border-radius: 4px; position: absolute; bottom: 7px; left: 50%; transform: translateX(-50%); }
+.scene-side-label { position: absolute; left: calc(50% + 190px); top: 42%; max-width: 160px; }
+.scene-side-label > span { font: 11px var(--font-mono); color: var(--device-accent); }
+.scene-side-label > p { font-size: 16px; line-height: 1.5; font-weight: 500; color: var(--device-secondary); }
+
+/* Android: instruction routing in front of a conceptual app under construction. */
+.android-phone { width: 312px; height: 514px; transform: translateX(-35px); }
+.android-request { display: flex; gap: 8px; align-items: center; margin: 7px 13px 0; padding: 9px 10px; border: 1px solid var(--device-line); border-radius: 7px; font-size: 10px; }
+.android-request > span { color: var(--device-accent); }
+.android-network { width: 100%; height: 364px; overflow: visible; }
+.android-wire { stroke: var(--device-line); stroke-width: 1; fill: none; }
+.android-wire-active { stroke: var(--device-accent); stroke-width: 1.6; fill: none; }
+.android-node { fill: var(--device-card); stroke: var(--device-line); stroke-width: 1; }
+.android-node.is-active { fill: var(--device-accent-soft); stroke: var(--device-accent); }
+.android-node-label { fill: var(--device-secondary); font-size: 10px; font-family: var(--font-sans); }
+.android-node-label.is-active { fill: var(--device-ink); }
+.android-node-indicator, .android-packet { fill: var(--device-accent); }
+.android-orchestrator { fill: var(--device-card); stroke: var(--device-line); stroke-width: 1.5; }
+.android-orchestrator.is-active { stroke: var(--device-accent); }
+.android-orchestrator-label { fill: var(--device-ink); font-size: 12px; font-weight: 500; font-family: var(--font-sans); }
+.android-legend { display: flex; flex-direction: column; gap: 4px; margin: -6px 17px 0; color: var(--device-secondary); font-size: 8px; line-height: 1.4; }
+.android-legend i { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--device-accent); margin-right: 3px; }
+.android-gates { display: flex; justify-content: space-between; padding: 8px 17px; font: 8px var(--font-mono); color: var(--device-secondary); }
+.android-gates > .is-ready { color: var(--device-accent); }
+.android-app-preview { position: absolute; top: 80px; left: calc(50% + 25px); width: 245px; height: 375px; border: 1px solid var(--device-line); border-radius: 18px; padding: 16px; background: var(--device-card); transform: rotate(7deg); opacity: 0.55; transition: opacity 400ms ease; }
+.android-app-preview.is-built { opacity: 1; }
+.android-app-preview > p { font: 8px var(--font-mono); color: var(--device-secondary); margin: 0 0 18px; }
+.app-preview-top { display: flex; gap: 10px; align-items: center; }
+.app-preview-top > i { width: 22px; height: 22px; border-radius: 7px; background: var(--device-accent); }
+.app-preview-top > span { width: 95px; height: 6px; background: var(--device-line); border-radius: 6px; }
+.app-preview-hero { height: 100px; background: var(--device-card); border-radius: 10px; margin-top: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
+.app-preview-hero i { width: 28px; height: 28px; border: 2px solid var(--device-accent); border-radius: 50%; }
+.app-preview-hero span { width: 90px; height: 4px; border-radius: 4px; background: var(--device-line); }
+.app-preview-hero span:last-child { width: 60px; }
+.app-preview-rows { display: flex; flex-direction: column; gap: 12px; margin-top: 18px; }
+.app-preview-rows i { height: 28px; border: 1px solid var(--device-line); border-radius: 7px; }
+.app-preview-ready { border-radius: 7px; padding: 9px; font-size: 10px; background: color-mix(in srgb, var(--device-accent) 14%, var(--device-bg)); color: var(--device-accent); margin-top: 15px; }
+.scene-android .scene-side-label { top: auto; bottom: 42px; left: calc(50% + 155px); }
+
+/* Komea: a camera frame resolves into inventory and a recipe. */
+.komea-phone { height: 510px; }
+.komea-phone .recruiter-phone-screen { background: var(--device-bg); }
+.komea-app-header { padding: 3px 18px 12px; display: flex; align-items: center; justify-content: space-between; }
+.komea-wordmark { font-weight: 650; font-size: 25px; letter-spacing: -0.06em; }
+.komea-wordmark > span { color: var(--device-accent); margin-left: 3px; }
+.komea-camera-title { display: flex; justify-content: space-between; margin: 0 17px 8px; font-size: 11px; color: var(--device-secondary); }
+.komea-viewfinder { position: relative; height: 156px; margin: 0 15px; display: flex; align-items: center; justify-content: center; border-radius: 12px; background: var(--device-bg); overflow: hidden; }
+.komea-viewfinder > svg { width: 130px; height: 126px; margin-top: -15px; }
+.food-tomato { fill: var(--device-tomato); }
+.food-stem { fill: var(--device-leaf); }
+.food-shadow { fill: var(--device-frame); opacity: 0.2; }
+.food-shine { stroke: var(--device-bg); opacity: 0.35; }
+.scan-corner { position: absolute; width: 20px; height: 20px; border-color: var(--device-accent); border-style: solid; border-width: 0; }
+.corner-tl { top: 12px; left: 12px; border-top-width: 2px; border-left-width: 2px; border-radius: 7px 0 0; }
+.corner-tr { top: 12px; right: 12px; border-top-width: 2px; border-right-width: 2px; border-radius: 0 7px 0 0; }
+.corner-bl { bottom: 12px; left: 12px; border-bottom-width: 2px; border-left-width: 2px; border-radius: 0 0 0 7px; }
+.corner-br { bottom: 12px; right: 12px; border-bottom-width: 2px; border-right-width: 2px; border-radius: 0 0 7px; }
+.komea-scan-beam { position: absolute; top: 15px; left: 12px; right: 12px; height: 2px; background: var(--device-accent); animation: recruiter-scan 1.5s ease-in-out infinite alternate; }
+.komea-scan-state { position: absolute; bottom: 12px; font: 8px var(--font-mono); color: var(--device-accent); background: var(--device-bg); padding: 4px 8px; border-radius: 4px; }
+.komea-ingredients { padding: 12px 17px; }
+.komea-ingredients > p { font: 8px var(--font-mono); color: var(--device-secondary); margin: 0 0 6px; }
+.komea-ingredients > div { display: flex; gap: 5px; flex-wrap: wrap; }
+.komea-ingredients span { font-size: 8px; padding: 4px 7px; border: 1px solid var(--device-line); border-radius: 20px; }
+.komea-recipe { padding: 13px; margin: 0 12px; border: 1px solid color-mix(in srgb, var(--device-accent) 40%, var(--device-line)); border-radius: 12px; background: color-mix(in srgb, var(--device-accent) 7%, var(--device-bg)); }
+.komea-recipe-kicker { font: 8px var(--font-mono); color: var(--device-accent); }
+.komea-recipe h3 { font-size: 17px; line-height: 1.15; letter-spacing: -0.03em; font-weight: 600; margin: 8px 0; }
+.komea-recipe p { color: var(--device-secondary); font-size: 9px; line-height: 1.5; margin: 0; }
+.komea-review { display: flex; justify-content: space-between; margin-top: 10px; font-size: 9px; color: var(--device-accent); }
+.komea-floating-food { width: 150px; position: absolute; left: calc(50% - 335px); top: 175px; transform: rotate(-12deg); }
+.komea-floating-food > span { font: 10px var(--font-mono); color: var(--device-secondary); display: block; text-align: center; }
+.komea-recipe-note { position: absolute; left: calc(50% + 185px); top: 330px; max-width: 150px; }
+.komea-recipe-note > span { color: var(--device-accent); font-size: 28px; }
+.komea-recipe-note > p { font-size: 15px; font-weight: 500; }
+.komea-orbit { position: absolute; width: 570px; height: 330px; border-radius: 50%; border: 1px solid color-mix(in srgb, var(--device-accent) 12%, transparent); transform: rotate(-25deg); }
+.komea-orbit-two { width: 700px; height: 450px; }
+
+/* Avisia retains the landing mockup's cream, ink, bronze and message palette. */
+.scene-avisia { --avisia-paper: #f4f2ea; --avisia-ink: #1a2233; --avisia-bronze: #a8732e; --avisia-message: #4c7a6b; --avisia-line: #d8d5c8; --avisia-white: #fff; }
+.avisia-phone { height: 510px; background: var(--avisia-ink); border-color: var(--avisia-bronze); }
+.avisia-phone .recruiter-phone-screen { background: var(--avisia-paper); color: var(--avisia-ink); }
+.avisia-phone .recruiter-phone-hardware { background: var(--avisia-ink); color: var(--avisia-paper); }
+.avisia-chat-header { display: flex; align-items: center; gap: 10px; padding: 5px 13px 14px; background: var(--avisia-ink); color: var(--avisia-paper); }
+.avisia-avatar { width: 32px; height: 32px; display: grid; place-items: center; background: var(--avisia-bronze); border-radius: 50%; font-family: Georgia, serif; font-size: 24px; }
+.avisia-chat-header strong { font-size: 11px; display: block; font-weight: 500; }
+.avisia-chat-header small { font-size: 9px; opacity: 0.7; }
+.avisia-chat-body { padding: 12px 10px; display: flex; flex-direction: column; gap: 8px; }
+.avisia-notification { display: flex; align-items: center; gap: 7px; padding: 10px 7px; border: 1px solid var(--avisia-line); border-radius: 9px; background: var(--avisia-white); }
+.avisia-notification > span { display: grid; place-items: center; width: 26px; height: 26px; flex-shrink: 0; border-radius: 6px; background: var(--avisia-paper); font-family: var(--font-mono); font-size: 11px; }
+.avisia-notification strong { font-size: 9px; display: block; }
+.avisia-notification p { font-size: 8px; margin: 4px 0 0; }
+.avisia-notification small { font-size: 7px; margin-left: auto; }
+.avisia-typing { align-self: flex-end; display: flex; gap: 4px; padding: 12px; border-radius: 10px; background: var(--avisia-ink); }
+.avisia-typing > i { width: 4px; height: 4px; background: var(--avisia-paper); border-radius: 50%; animation: recruiter-typing 900ms ease-in-out infinite; }
+.avisia-typing > i:nth-child(2) { animation-delay: 150ms; }
+.avisia-typing > i:nth-child(3) { animation-delay: 300ms; }
+.avisia-bubble { border-radius: 12px; padding: 9px; max-width: 95%; }
+.avisia-bubble p { margin: 0; font-size: 10px; line-height: 1.45; }
+.avisia-bubble > span { margin-top: 6px; display: flex; align-items: center; justify-content: flex-end; gap: 5px; opacity: 0.65; font-size: 8px; }
+.avisia-reply { align-self: flex-end; background: var(--avisia-ink); color: var(--avisia-paper); border-bottom-right-radius: 3px; }
+.avisia-answer { align-self: flex-start; background: var(--avisia-white); color: var(--avisia-ink); border: 1px solid var(--avisia-line); border-bottom-left-radius: 3px; }
+.avisia-summary { display: flex; gap: 10px; align-items: center; padding: 11px; background: var(--avisia-white); border: 1px solid var(--avisia-line); border-radius: 10px; }
+.avisia-summary-icon { color: var(--avisia-message); border: 1px solid var(--avisia-message); border-radius: 50%; width: 30px; height: 30px; display: grid; place-items: center; flex-shrink: 0; }
+.avisia-summary strong { font-size: 10px; }
+.avisia-summary p { font-size: 9px; line-height: 1.5; margin: 3px 0 0; }
+.avisia-channel { font: 7px var(--font-mono); margin: 0; text-align: center; color: var(--avisia-message); }
+.avisia-minute-ring { position: absolute; width: 420px; height: 420px; left: calc(50% - 400px); top: 70px; color: var(--avisia-bronze); opacity: 0.7; }
+.avisia-minute-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.avisia-minute-ring circle { fill: none; stroke: var(--device-line); stroke-width: 1; }
+.avisia-minute-ring circle + circle { stroke: var(--avisia-bronze); stroke-width: 2; stroke-dasharray: 1163; stroke-dashoffset: 920; transition: stroke-dashoffset 1s ease; }
+.avisia-minute-ring circle.is-ready { stroke-dashoffset: 260; }
+.avisia-minute-ring > span { position: absolute; top: 45%; left: 60px; font-size: 33px; font-family: Georgia, serif; letter-spacing: -0.04em; }
+.avisia-minute-ring > span > span { display: block; color: var(--avisia-bronze); font-family: var(--font-sans); }
+
+/* A self-contained frosted shortcut, with an opaque fallback for clear contrast. */
+.recruiter-shortcut {
+  --shortcut-paper: #f8f7f0;
+  --shortcut-ink: #29362e;
+  --shortcut-secondary: #626b61;
+  --shortcut-accent: #49684f;
+  display: flex; align-items: center; gap: 12px; padding: 12px 14px; min-height: 72px;
+  width: 100%; margin-bottom: 18px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.72);
+  background: var(--shortcut-paper); background-image: linear-gradient(155deg, rgba(255, 254, 248, 0.95), rgba(235, 241, 231, 0.82));
+  background-color: rgba(248, 247, 240, 0.88); color: var(--shortcut-ink);
+  box-shadow: inset 0 0 0 1px rgba(46, 66, 49, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 8px 24px rgba(17, 30, 24, 0.15), 0 1px 3px rgba(17, 30, 24, 0.08);
+  -webkit-backdrop-filter: blur(22px) saturate(1.2); backdrop-filter: blur(22px) saturate(1.2);
+  font-family: var(--font-sans); text-align: left; cursor: pointer;
+  transition: transform 160ms var(--ease-out), box-shadow 160ms ease, border-color 160ms ease;
+}
+.recruiter-shortcut-icon { display: grid; place-items: center; width: 42px; height: 42px; flex-shrink: 0; border-radius: 13px; color: var(--shortcut-accent); background: linear-gradient(150deg, #fffef8, #dde7d7); border: 1px solid rgba(68, 94, 68, 0.12); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9); }
+.recruiter-shortcut-copy { display: block; min-width: 0; }
+.recruiter-shortcut strong { display: block; font-size: 13px; line-height: 1.4; font-weight: 650; letter-spacing: -0.015em; }
+.recruiter-shortcut small { display: block; font-size: 10px; line-height: 1.5; font-weight: 400; color: var(--shortcut-secondary); margin-top: 2px; }
+.recruiter-shortcut-arrow { display: grid; place-items: center; width: 24px; height: 24px; flex-shrink: 0; margin-left: auto; border-radius: 50%; background: rgba(255, 255, 255, 0.58); color: var(--shortcut-secondary); }
+.recruiter-shortcut:active:not(:focus-visible) { transform: scale(0.985); }
+.recruiter-shortcut:focus-visible { outline: 2px solid var(--shortcut-accent); outline-offset: 4px; box-shadow: 0 0 0 6px rgba(255, 254, 248, 0.94), 0 8px 24px rgba(17, 30, 24, 0.15); }
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .recruiter-shortcut { background: var(--shortcut-paper); }
+}
+.is-paused .komea-scan-beam, .is-paused .avisia-typing > i { animation-play-state: paused; }
+@keyframes recruiter-scan { to { transform: translateY(115px); } }
+@keyframes recruiter-typing { 50% { transform: translateY(-3px); opacity: 0.5; } }
+
+
+/* Remove ambient decoration; the flat colour field and product do the work. */
+.scene-side-label, .komea-orbit, .komea-floating-food, .komea-recipe-note, .avisia-minute-ring { display: none; }
+@media (hover: hover) and (pointer: fine) {
+  .recruiter-dialog a:hover, .recruiter-scene-controls button:not(:disabled):hover, .recruiter-bar-actions button:hover,
+  .recruiter-project-actions button:hover, .recruiter-pager button:not(:disabled):hover { color: var(--tour-project, var(--tour-accent)); }
+  .recruiter-project-tabs button:hover { color: var(--tour-project); }
+  .recruiter-shortcut:hover { transform: translateY(-1px); border-color: rgba(255, 255, 255, 0.95); box-shadow: inset 0 0 0 1px rgba(46, 66, 49, 0.09), inset 0 1px 0 rgba(255, 255, 255, 0.95), 0 12px 28px rgba(17, 30, 24, 0.18), 0 2px 4px rgba(17, 30, 24, 0.07); }
+  .recruiter-shortcut:hover .recruiter-shortcut-arrow { color: var(--shortcut-accent); }
+  .recruiter-shortcut:active:not(:focus-visible) { transform: scale(0.985); }
+}
+@media (min-width: 900px) {
+  .recruiter-pagination-header { flex-wrap: nowrap; min-height: 52px; padding-inline: clamp(32px, 4vw, 64px); }
+  .recruiter-project-tabs { flex-basis: auto; max-width: 670px; gap: 36px; }
+  .recruiter-project-tabs button { font-size: 12px; min-height: 52px; }
+  .recruiter-project-actions { flex-shrink: 0; }
+  .recruiter-section { height: 100%; min-height: 610px; width: min(1320px, calc(100% - 96px)); display: flex; flex-direction: column; }
+  .recruiter-section-heading { margin-bottom: 28px; flex-shrink: 0; }
+  .recruiter-section h2 { font-size: clamp(36px, 3.4vw, 46px); max-width: none; }
+  .recruiter-project-body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(40px, 5vw, 76px); min-height: 0; flex: 1; }
+  .recruiter-visual-column { min-height: 0; }
+  .recruiter-case { overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: var(--tour-line) var(--tour-bg); padding: 0 14px 12px 2px; }
+  .recruiter-case-row:first-child { padding-top: 0; border-top: 0; }
+  .recruiter-case-row > p { font-size: 14px; }
+  .recruiter-case-limitations > p { font-size: 13px; }
+  .recruiter-scene { height: 350px; }
+  .recruiter-phone { transform: scale(0.68); }
+  .android-phone { transform: translateX(-16px) scale(0.68); }
+  .android-app-preview { top: 42px; left: calc(50% + 26px); transform: rotate(7deg) scale(0.68); transform-origin: top left; }
+  .recruiter-disclaimer { margin-bottom: 0; }
+  .recruiter-pager { padding-inline: clamp(32px, 4vw, 64px); }
+}
+@media (min-width: 900px) and (min-height: 850px) {
+  .recruiter-section { min-height: 680px; }
+  .recruiter-scene { height: 440px; }
+  .recruiter-phone { transform: scale(0.82); }
+  .android-phone { transform: translateX(-20px) scale(0.82); }
+  .android-app-preview { transform: rotate(7deg) scale(0.82); }
+  .recruiter-case-row > p { font-size: 15px; }
+}
+@media (max-width: 899px) {
+  .recruiter-bar { padding: 10px 22px; }
+  .recruiter-brand { font-size: 12px; }
+  .recruiter-brand > span { display: none; }
+  .recruiter-bar-actions { gap: 20px; font-size: 11px; }
+  .recruiter-section h2 { font-size: clamp(33px, 7vw, 44px); }
+  .recruiter-phone { width: 270px; height: 500px; }
+  .android-phone { width: 286px; height: 508px; transform: none; }
+  .android-network { height: 350px; }
+  .android-app-preview { left: calc(50% + 25px); width: 170px; top: 90px; opacity: 0.25 !important; }
+  .recruiter-pager button { font-size: 11px; gap: 8px; }
+  .recruiter-shortcut { width: 100%; max-width: 290px; min-height: 66px; margin: 0 auto 12px; padding: 10px 12px; border-radius: 18px; }
+  .recruiter-shortcut-icon { width: 38px; height: 38px; border-radius: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .recruiter-dialog *, .recruiter-shortcut { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .recruiter-shortcut:hover, .recruiter-shortcut:active { transform: none !important; }
+}

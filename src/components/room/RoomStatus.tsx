@@ -1,7 +1,8 @@
 import { Component } from 'react';
 import type { ErrorInfo, ReactNode } from 'react';
 import { useProgress } from '@react-three/drei';
-import type { Lang } from './language';
+
+type Lang = 'es' | 'en';
 
 interface RoomErrorBoundaryProps {
   children: ReactNode;

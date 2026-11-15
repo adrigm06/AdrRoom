@@ -1,38 +1,32 @@
 import { Suspense, useEffect, useRef, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import * as THREE from 'three';
-import type { Lang } from './language';
+import { useLanguageState } from '@/hooks/useLanguage';
+import type { ProjectEntry } from '@/components/os/Desktop';
 import RoomScene from './RoomScene';
 import { RoomErrorBoundary, RoomLoadingStatus } from './RoomStatus';
 import './room.css';
 
-export default function RoomExperience() {
-  const [lang, setLang] = useState<Lang>('es');
+interface RoomExperienceProps {
+  projects: ProjectEntry[];
+}
+
+export default function RoomExperience({ projects }: RoomExperienceProps) {
+  const { lang, toggleLang } = useLanguageState();
   const [focused, setFocused] = useState(false);
   const focusMonitor = useRef<(() => void) | null>(null);
   const returnToRoom = useRef<(() => void) | null>(null);
 
   useEffect(() => {
-    const saved = localStorage.getItem('adrroom-lang');
-    if (saved === 'es' || saved === 'en') {
-      setLang(saved);
-    } else {
-      setLang(navigator.language.startsWith('es') ? 'es' : 'en');
-    }
-  }, []);
-
-  useEffect(() => {
     document.documentElement.lang = lang;
-    document.title = lang === 'es'
-      ? 'AdrRoom — Portfolio interactivo'
-      : 'AdrRoom — Interactive portfolio';
+    document.title = lang === 'es' ? 'AdrRoom — Portfolio interactivo' : 'AdrRoom — Interactive portfolio';
     document
       .querySelector('meta[name="description"]')
       ?.setAttribute(
         'content',
         lang === 'es'
-          ? 'Explora AdrRoom, un portfolio 3D interactivo.'
-          : 'Explore AdrRoom, an interactive 3D portfolio.',
+          ? 'Explora AdrRoom, un portfolio interactivo en español e inglés.'
+          : 'Explore AdrRoom, an interactive portfolio in Spanish and English.',
       );
   }, [lang]);
 
@@ -45,12 +39,7 @@ export default function RoomExperience() {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [focused]);
 
-  const changeLanguage = (next: Lang) => {
-    setLang(next);
-    localStorage.setItem('adrroom-lang', next);
-  };
   const isSpanish = lang === 'es';
-
   return (
     <main className={`room-experience${focused ? ' room-experience--focused' : ''}`} lang={lang}>
       <div
@@ -74,7 +63,7 @@ export default function RoomExperience() {
                   src="/room-preview.png"
                   width="1440"
                   height="960"
-                  alt={isSpanish ? 'Vista previa de AdrRoom' : 'AdrRoom preview'}
+                  alt={isSpanish ? 'Vista previa de la habitación de AdrRoom' : 'AdrRoom room preview'}
                 />
                 <p>
                   {isSpanish
@@ -91,6 +80,7 @@ export default function RoomExperience() {
             <Suspense fallback={null}>
               <RoomScene
                 lang={lang}
+                projects={projects}
                 focused={focused}
                 onFocusChange={setFocused}
                 focusCommand={focusMonitor}
@@ -109,10 +99,10 @@ export default function RoomExperience() {
         </a>
         {!focused && (
           <div className="room-language" role="group" aria-label={isSpanish ? 'Idioma' : 'Language'}>
-            <button type="button" aria-pressed={lang === 'es'} onClick={() => changeLanguage('es')}>
+            <button type="button" aria-pressed={lang === 'es'} onClick={() => lang !== 'es' && toggleLang()}>
               ES
             </button>
-            <button type="button" aria-pressed={lang === 'en'} onClick={() => changeLanguage('en')}>
+            <button type="button" aria-pressed={lang === 'en'} onClick={() => lang !== 'en' && toggleLang()}>
               EN
             </button>
           </div>
@@ -123,13 +113,13 @@ export default function RoomExperience() {
         <>
           <div className="room-hint" aria-label={isSpanish ? 'Controles de cámara' : 'Camera controls'}>
             <span className="room-hint__icon" aria-hidden="true">↔</span>
-            <span>{isSpanish ? 'Arrastra para mirar alrededor' : 'Drag to look around'}</span>
+            <span>{isSpanish ? 'Arrastrar para mirar alrededor' : 'Drag to look around'}</span>
           </div>
           <button
             className="room-skip"
             type="button"
             onClick={() => focusMonitor.current?.()}
-            aria-label={isSpanish ? 'Abrir AdrRoom en el monitor' : 'Open AdrRoom on the monitor'}
+            aria-label={isSpanish ? 'Abrir portfolio en el monitor' : 'Open portfolio on the monitor'}
           >
             {isSpanish ? 'Abrir portfolio' : 'Open portfolio'}
           </button>

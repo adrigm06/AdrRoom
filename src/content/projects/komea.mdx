@@ -1,0 +1,161 @@
+---
+id: "komea"
+title: "Komea"
+subtitle: "AI-Powered Food Management"
+zone: "android"
+status: "active"
+date: "2025-12"
+color: "#34d399"
+hasImages: true
+githubUrl: ""
+demoUrl: ""
+linkedinUrl: ""
+stack:
+  - "Kotlin"
+  - "Jetpack Compose"
+  - "Material Design 3"
+  - "Android Jetpack"
+  - "Generative AI"
+  - "MVVM"
+  - "Clean Architecture"
+  - "UDF"
+description:
+  es: "App Android nativa con IA generativa para optimizar la gestión alimentaria diaria."
+  en: "Native Android app with generative AI to optimise daily food management."
+caseStudy:
+  scene: "komea"
+  headline:
+    es: "Lo que tienes en casa. Lo que puedes cocinar."
+    en: "What you have at home. What you can cook."
+  problem:
+    es: "Inventario, planificación y recetas suelen vivir separados. Decidir qué cocinar exige recordar qué queda en casa y trasladarlo entre herramientas."
+    en: "Inventory, planning and recipes often live in separate tools. Deciding what to cook means remembering what is available and moving it between them."
+  contribution:
+    es: "Desarrollé una app Android nativa que reúne inventario, escaneo visual, planificación y recetas con IA en una experiencia construida con Kotlin y Jetpack Compose."
+    en: "I developed a native Android app bringing inventory, visual scanning, planning and AI recipes together in an experience built with Kotlin and Jetpack Compose."
+  decision:
+    es: "Separar presentación, lógica de producto y generación de IA con Clean Architecture y flujo unidireccional. La propuesta generada no debe sustituir el control del inventario."
+    en: "Separate presentation, product logic and AI generation through Clean Architecture and unidirectional data flow. A generated suggestion must not replace inventory control."
+  result:
+    es: "Las capturas del proyecto muestran la aplicación y sus flujos de producto. La escena resume el recorrido de alimento a receta; no usa la cámara ni llama a un modelo."
+    en: "Project screenshots show the application and its product flows. This scene explains the food-to-recipe journey; it does not access a camera or call a model."
+  limitations:
+    es: "Proyecto en desarrollo. No se aportan métricas de precisión del reconocimiento, ahorro de alimentos ni adopción. Una receta generada requiere revisión, especialmente ante alergias."
+    en: "A project in development. No recognition-accuracy, food-waste or adoption metrics are claimed. Generated recipes need review, especially where allergies are involved."
+  sceneDescription:
+    es: "Demostración ilustrativa con ingredientes y receta de ejemplo. No realiza reconocimiento ni ofrece asesoramiento nutricional."
+    en: "Illustrative demonstration with example ingredients and recipe. It does not perform recognition or provide nutritional advice."
+  sceneSteps:
+    es: ["Un alimento por registrar","Escaneo visual","Ingredientes disponibles","Una propuesta de receta","Tú revisas y decides"]
+    en: ["Food to log","Visual scan","Available ingredients","A recipe suggestion","You review and decide"]
+  sceneCopy:
+    camera:
+      es: "Escanear alimento"
+      en: "Scan food"
+    inventory:
+      es: "Tu despensa"
+      en: "Your pantry"
+    detected:
+      es: "Ingredientes · ejemplo"
+      en: "Ingredients · example"
+    tomato:
+      es: "Tomate"
+      en: "Tomato"
+    rice:
+      es: "Arroz"
+      en: "Rice"
+    basil:
+      es: "Albahaca"
+      en: "Basil"
+    recipe:
+      es: "Arroz con tomate y albahaca"
+      en: "Tomato and basil rice"
+    recipeDetail:
+      es: "Una idea con lo que ya tienes. Revisa ingredientes y restricciones antes de cocinar."
+      en: "An idea using what you already have. Review ingredients and restrictions before cooking."
+    suggestion:
+      es: "Propuesta de receta"
+      en: "Recipe suggestion"
+    review:
+      es: "Revisar receta"
+      en: "Review recipe"
+    scan:
+      es: "Identificando…"
+      en: "Identifying…"
+    ready:
+      es: "Del inventario al plato"
+      en: "From pantry to plate"
+  evidence: [{"label":{"es":"Captura de la aplicación","en":"Application screenshot"},"url":"/projects/komea/screenshots/01.webp"},{"label":{"es":"Explorar otra pantalla","en":"Explore another screen"},"url":"/projects/komea/screenshots/02.webp"}]
+---
+
+<Content lang="es">
+
+Komea es una aplicación Android nativa —actualmente en fase avanzada de desarrollo y próxima a lanzarse a producción— que optimiza la gestión alimentaria mediante **Inteligencia Artificial Generativa**. Unifica la planificación de menús y el control de inventario doméstico en una única experiencia automatizada.
+
+#### Arquitectura
+
+| Capa | Enfoque |
+|---|---|
+| **UI** | Jetpack Compose + Material Design 3 |
+| **Arquitectura** | Clean Architecture + MVVM + UDF (flujo unidireccional) |
+| **IA** | Procesamiento y estructuración de datos con IA Generativa |
+| **Lenguaje** | Kotlin 100% nativo |
+| **Escalabilidad** | Diseño modular orientado a producto |
+
+#### Funcionalidades Principales
+
+| Característica | Descripción |
+|---|---|
+| 🧠 **Planificación inteligente** | La IA genera menús personalizados según preferencias, restricciones y disponibilidad |
+| 📋 **Lista de la compra automática** | Generada directamente desde la planificación semanal |
+| 🥘 **Recetas personalizadas** | Sugerencias basadas en ingredientes disponibles en casa |
+| 📷 **Escaneo de alimentos** | Reconocimiento visual para registrar inventario |
+| 👥 **Comunidad de recetas** | Comparte recetas, la comunidad las adapta y genera nuevas versiones |
+| 🔄 **Adaptación en tiempo real** | El sistema se ajusta dinámicamente a cambios en la nevera o preferencias |
+
+#### Impacto
+
+- **Generación automática** de listas de la compra
+- **Reducción del esfuerzo manual** en la planificación diaria
+- **Ahorro de alimentos** al priorizar ingredientes disponibles
+- **Creatividad culinaria colaborativa** con recetas compartidas
+
+> Proyecto en desarrollo avanzado — lanzamiento público previsto próximamente.
+
+</Content>
+
+<Content lang="en">
+
+Komea is a native Android application —currently in advanced development and nearing production launch— that optimises food management through **Generative AI**. It unifies meal planning and household inventory control into a single automated experience.
+
+#### Architecture
+
+| Layer | Approach |
+|---|---|
+| **UI** | Jetpack Compose + Material Design 3 |
+| **Architecture** | Clean Architecture + MVVM + UDF |
+| **AI** | Generative AI for data processing and structuring |
+| **Language** | 100% native Kotlin |
+| **Scalability** | Product-oriented modular design |
+
+#### Key Features
+
+| Feature | Description |
+|---|---|
+| 🧠 **Smart planning** | AI generates personalised menus based on preferences, restrictions and availability |
+| 📋 **Auto shopping list** | Generated directly from weekly meal plan |
+| 🥘 **Personalised recipes** | Suggestions based on ingredients at home |
+| 📷 **Food scanning** | Visual recognition to log inventory |
+| 👥 **Recipe community** | Share recipes, community adapts and generates new versions |
+| 🔄 **Real-time adaptation** | System adjusts dynamically to fridge changes or preferences |
+
+#### Impact
+
+- **Automatic** shopping list generation
+- **Reduced manual effort** in daily meal planning
+- **Food waste reduction** by prioritising available ingredients
+- **Collaborative culinary creativity** with shared recipes
+
+> Project in advanced development — public launch coming soon.
+
+</Content>

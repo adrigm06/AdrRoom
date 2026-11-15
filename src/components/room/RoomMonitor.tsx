@@ -3,12 +3,13 @@ import { useLoader } from '@react-three/fiber';
 import { useEffect } from 'react';
 import { TextureLoader } from 'three';
 import * as THREE from 'three';
-import type { Lang } from './language';
-import MonitorPortfolio from './MonitorPortfolio';
+import Desktop from '@/components/os/Desktop';
+import type { ProjectEntry } from '@/components/os/Desktop';
+import type { Lang } from '@/hooks/useLanguage';
 
 const PREVIEW_IMAGES = [
-  '/room-monitor-preview-es.svg',
-  '/room-monitor-preview-en.svg',
+  '/adr-os-preview-es.webp',
+  '/adr-os-preview-en.webp',
 ];
 const DISPLAY_WIDTH = 1.015;
 const DISPLAY_HEIGHT = 0.565;
@@ -21,6 +22,7 @@ const HTML_DISTANCE_FACTOR = DISPLAY_WIDTH * 400 / HTML_WIDTH;
 
 interface RoomMonitorProps {
   lang: Lang;
+  projects: ProjectEntry[];
   focused: boolean;
   hovered: boolean;
   screenVisible: boolean;
@@ -30,6 +32,7 @@ interface RoomMonitorProps {
 
 export default function RoomMonitor({
   lang,
+  projects,
   focused,
   hovered,
   screenVisible,
@@ -65,7 +68,7 @@ export default function RoomMonitor({
           pointerEvents={focused ? 'auto' : 'none'}
         >
           <div className="room-screen">
-            <MonitorPortfolio lang={lang} />
+            <Desktop projects={projects} embedded />
           </div>
         </Html>
       )}

@@ -59,7 +59,7 @@ opencode/
 # Vercel output
 .vercel/
 
-# AdrRoom local assets and captures
+# AdrRoom local authoring files and captures
 /captures/
 /models/
 *.blend

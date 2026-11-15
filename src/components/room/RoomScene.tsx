@@ -4,12 +4,14 @@ import { useThree } from '@react-three/fiber';
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import { gsap } from 'gsap';
 import * as THREE from 'three';
-import type { Lang } from './language';
+import type { ProjectEntry } from '@/components/os/Desktop';
+import type { Lang } from '@/hooks/useLanguage';
 import RoomModel from './RoomModel';
 import RoomMonitor from './RoomMonitor';
 
 interface RoomSceneProps {
   lang: Lang;
+  projects: ProjectEntry[];
   focused: boolean;
   onFocusChange: (focused: boolean) => void;
   focusCommand: { current: (() => void) | null };
@@ -30,6 +32,7 @@ interface CameraSnapshot {
 
 export default function RoomScene({
   lang,
+  projects,
   focused,
   onFocusChange,
   focusCommand,
@@ -133,6 +136,7 @@ export default function RoomScene({
       )}
       <RoomMonitor
         lang={lang}
+        projects={projects}
         focused={focused}
         hovered={monitorHovered}
         screenVisible={screenVisible}

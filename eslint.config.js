@@ -4,7 +4,7 @@ import tseslint from 'typescript-eslint';
 import astro from 'eslint-plugin-astro';
 
 export default [
-  { ignores: ['dist/**', '.astro/**', '.vercel/**', 'node_modules/**', 'public/**'] },
+  { ignores: ['dist/**', '.astro/**', '.vercel/**', 'node_modules/**', 'supabase/**', 'public/**'] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   ...astro.configs.recommended,

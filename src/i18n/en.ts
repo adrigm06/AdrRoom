@@ -1,0 +1,85 @@
+export const translations = {
+  // Recruiter tour
+  recruiter_previous_project: "Previous",
+  recruiter_next_project: "Next",
+  recruiter_page_controls: "Change project",
+  recruiter_no_projects: "No projects are available.",
+  recruiter_label: "Recruiter Mode",
+  recruiter_shortcut_description: "3 projects · one guided tour",
+  recruiter_language: "Change language to Spanish",
+  recruiter_exit: "Back to desktop",
+  recruiter_loading: "Preparing the tour…",
+  recruiter_cv: "View CV",
+  recruiter_navigation: "Project navigation",
+  recruiter_contact: "Let’s talk",
+  recruiter_illustration: "ILLUSTRATIVE DEMO",
+  recruiter_static: "Static view",
+  recruiter_complete: "Sequence complete",
+  recruiter_paused: "Paused",
+  recruiter_demo: "Local simulation",
+  recruiter_resume: "Resume",
+  recruiter_pause: "Pause",
+  recruiter_replay: "Replay",
+  recruiter_skip: "Skip to case study",
+  recruiter_case: "Case study",
+  recruiter_problem: "The problem",
+  recruiter_contribution: "My contribution",
+  recruiter_decision: "The difficult decision",
+  recruiter_result: "Verifiable result",
+  recruiter_limitations: "Current limitations",
+  recruiter_evidence: "EXPLORE THE EVIDENCE",
+
+  // Taskbar
+  taskbar_os_name: 'AdrOS',
+  taskbar_lang_toggle: 'ES',
+
+  // Desktop zones
+  zone_android: '📱 Android & Mobile',
+  zone_fullstack: '🌐 Full-Stack & Web',
+  zone_ai_tools: '🛠️ AI & Tools',
+  zone_quicklinks: '📌 Quick Access',
+
+  // Project window — tabs
+  tab_readme: 'README',
+  tab_screenshots: 'Screenshots',
+  tab_stack: 'Stack',
+  tab_links: 'Links',
+
+  // List view
+  list_col_name: 'Project',
+  list_col_zone: 'Category',
+  list_col_stack: 'Stack',
+  list_col_date: 'Date',
+
+  // Profile
+  profile_title: 'Adrián Gómez — adrigm',
+  profile_role: 'Full Stack Developer | AI Engineer',
+  profile_location: '📍 Málaga, Spain',
+  profile_bio: 'AI Engineer and Full Stack Developer specialized in Java and Spring Boot, with experience in backend development and microservices architectures in FinTech environments. My specialization focuses on AI Engineering, particularly LLM integration, RAG systems, autonomous agents, and software process automation. I also work across frontend and mobile engineering.',
+
+  // QuickLinks
+  quicklinks_github: 'GitHub',
+  quicklinks_linkedin: 'LinkedIn',
+  quicklinks_email: 'Email',
+  quicklinks_about: 'About me',
+
+  // Tooltips
+  tooltip_open_folder: 'Open project',
+  tooltip_minimize: 'Minimize',
+  tooltip_maximize: 'Maximize',
+  tooltip_close: 'Close',
+
+  // Chat (RAG Chatbot)
+  chat_label:       'Ask me',
+  chat_placeholder: 'Type something...',
+  chat_thinking:    'Thinking...',
+  chat_error:       'Something went wrong. Please try again.',
+  chat_title:       'AdrBOT',
+  chat_send:        'Send',
+};
+
+export { mailEnglish as appTranslations } from './apps';
+
+export { terminalCopy } from './terminal';
+
+export { repositoryCopy } from './repository';

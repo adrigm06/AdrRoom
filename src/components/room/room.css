@@ -212,6 +212,10 @@
   contain: layout paint;
 }
 
+.adros-desktop--embedded {
+  transform-origin: top left;
+}
+
 @keyframes room-pulse {
   to { opacity: 0.42; transform: scale(0.75); }
 }

@@ -1,6 +1,10 @@
 ---
-import '@/styles/room-global.css';
+import '@/styles/global.css';
 import RoomExperience from '@/components/room/RoomExperience';
+import { getCollection } from 'astro:content';
+
+const projects = await getCollection('projects');
+const title = 'AdrRoom — Interactive portfolio';
 ---
 
 <!doctype html>
@@ -11,13 +15,28 @@ import RoomExperience from '@/components/room/RoomExperience';
     <meta name="theme-color" content="#171916" />
     <meta
       name="description"
-      content="Explore AdrRoom, an interactive 3D portfolio in Spanish and English."
+      content="Explore AdrRoom, an interactive portfolio in Spanish and English."
     />
-    <title>AdrRoom — Interactive portfolio</title>
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
     <link rel="preload" href="/room-preview.png" as="image" />
   </head>
   <body>
-    <RoomExperience client:load />
+    <RoomExperience client:load projects={projects} />
   </body>
 </html>
+
+<style is:global>
+  html,
+  body {
+    width: 100%;
+    min-width: 320px;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    background: #171916;
+  }
+
+  body {
+    min-height: 100svh;
+  }
+</style>
