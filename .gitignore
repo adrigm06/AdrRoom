@@ -1,0 +1,67 @@
+# build output
+dist/
+# generated types
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+
+# environment variables
+.env
+.env.production
+.env.*
+!.env.example
+
+# macOS-specific files
+.DS_Store
+
+# jetbrains setting folder
+.idea/
+
+# tool-specific
+.pi-lens/
+.pi/
+.atl/
+
+# environment
+.env.local
+
+# docs (project-specific)
+docs/
+
+# AGENTS.md
+AGENTS.md
+
+# local agent configs
+.agents/
+
+# opencode workspace
+opencode/
+
+# TypeScript
+*.tsbuildinfo
+
+# local env overrides
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE
+.vscode/
+
+# Vercel output
+.vercel/
+
+# AdrRoom local assets and captures
+/captures/
+/models/
+*.blend
+*.blend1
+*.blend2
