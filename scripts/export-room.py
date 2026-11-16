@@ -1,4 +1,6 @@
 import bpy
+import json
+import struct
 from pathlib import Path
 from mathutils import Vector
 
@@ -7,17 +9,16 @@ project_root = Path(__file__).resolve().parent.parent
 blend_path = Path(bpy.data.filepath).resolve()
 source_dir = blend_path.parent
 output_path = project_root / "public" / "models" / "room.glb"
-photo_path = source_dir / "MalagaTardePanoramica.png"
+candidate_path = project_root / "captures" / "room-candidate.glb"
+photo_path = source_dir / "textures" / "malaga-panorama.jpg"
 output_path.parent.mkdir(parents=True, exist_ok=True)
+candidate_path.parent.mkdir(parents=True, exist_ok=True)
 
-photo = bpy.data.images.get("MalagaTardePanoramica.png")
+# Retain the original image datablock for finding its reference empty.
+original_photo = bpy.data.images.get("MalagaTardePanoramica.png")
 if not photo_path.exists():
     raise FileNotFoundError(f"Panorama not found: {photo_path}")
-if photo is None:
-    photo = bpy.data.images.load(str(photo_path))
-else:
-    photo.filepath = str(photo_path)
-    photo.reload()
+photo = bpy.data.images.load(str(photo_path))
 photo.colorspace_settings.name = "sRGB"
 
 glass_panes = sorted(
@@ -52,7 +53,7 @@ image_width = window_width * 1.8
 image_height = image_width * photo.size[1] / photo.size[0]
 photo_reference = next(
     (obj for obj in bpy.context.scene.objects
-     if obj.type == "EMPTY" and obj.data == photo),
+     if obj.type == "EMPTY" and obj.data == original_photo),
     None,
 )
 image_y = photo_reference.matrix_world.translation.y if photo_reference else 3.8524
@@ -172,22 +173,80 @@ bpy.context.view_layer.objects.active = scene_meshes[0] if scene_meshes else Non
 if not scene_meshes:
     raise RuntimeError("No mesh objects found in the scene")
 
-triangle_count = sum(
-    max(0, len(poly.vertices) - 2)
-    for obj in scene_meshes
-    for poly in obj.data.polygons
-)
+triangle_count = 0
+depsgraph = bpy.context.evaluated_depsgraph_get()
+for obj in scene_meshes:
+    evaluated = obj.evaluated_get(depsgraph)
+    data = evaluated.to_mesh()
+    data.calc_loop_triangles()
+    triangle_count += len(data.loop_triangles)
+    evaluated.to_mesh_clear()
+
 bpy.ops.export_scene.gltf(
-    filepath=str(output_path),
+    filepath=str(candidate_path),
     export_format="GLB",
     use_selection=True,
     export_apply=True,
     export_materials="EXPORT",
     export_cameras=False,
     export_lights=False,
-    export_animations=False,
+    export_animations=True,
+    export_animation_mode="ACTIONS",
     export_yup=True,
 )
+
+# Validate the candidate before replacing the current working runtime asset.
+candidate = candidate_path.read_bytes()
+if candidate[:4] != b"glTF" or struct.unpack_from("<I", candidate, 4)[0] != 2:
+    raise RuntimeError("Exporter did not produce a valid glTF 2 binary")
+json_length = struct.unpack_from("<I", candidate, 12)[0]
+document = json.loads(candidate[20:20 + json_length])
+names = {node.get("name", "") for node in document.get("nodes", [])}
+required_names = {
+    "Monitor | bezel", "Robot pet | rounded shell",
+    "Robot pet | eye", "Robot pet | eye.001", "Robot pet | projection jaw",
+}
+missing = required_names - names
+if missing:
+    raise RuntimeError(f"Export lost required runtime nodes: {sorted(missing)}")
+if "AN_Robot_Mouth_Projection" not in {
+    action.get("name") for action in document.get("animations", [])
+}:
+    raise RuntimeError("Export lost the robot projection-mouth animation")
+if bpy.context.scene.get("visual_refinement"):
+    obsolete = names & {"Monitor | wallpaper landscape", "Monitor | active display"}
+    if obsolete:
+        raise RuntimeError(f"Redundant monitor screen layers reintroduced: {obsolete}")
+    if triangle_count > 180000:
+        raise RuntimeError(f"Detailed room exceeds its triangle budget: {triangle_count}")
+    if len(document.get("materials", [])) > 75:
+        raise RuntimeError("Detailed room exceeds its material budget")
+if bpy.context.scene.get("visual_refinement") == "detailed-room-v2":
+    audit = json.loads(bpy.context.scene["environment_audit"])
+    if (audit["book_count"] != 55 or audit["reserved_decor_cells"] != 4
+            or audit["library_unintended_intersections"]
+            or audit["floor_planks_preserved"] != 80
+            or audit["floor_edge_gaps_repaired"] != 10
+            or not audit["lamp_shade_open"]):
+        raise RuntimeError("Environment source audit failed")
+    for prefix in ("Library detail |", "Library books |", "Library ornaments |",
+                   "Library vine |", "Window detail |", "Floor detail |",
+                   "Art detail |", "Cork detail |", "Curtain detail |", "Lamp detail |"):
+        if not any(name.startswith(prefix) for name in names):
+            raise RuntimeError(f"Environment detail lost during export: {prefix}")
+    if any(name.startswith(("Bookcase |", "Book |", "Shelf |", "Headphones |",
+                            "Rug | woven thread", "Curtain | vertical pleat")) for name in names):
+        raise RuntimeError("Obsolete overlapping or alias-prone environment geometry returned")
+    if sum(name.startswith("Window glass | insulated pane") for name in names) != 5:
+        raise RuntimeError("Export lost the panorama window panes")
+    atlas = [image for image in document.get("images", []) if image.get("name") == "room-prints"]
+    if len(atlas) != 1 or atlas[0].get("mimeType") != "image/jpeg":
+        raise RuntimeError("Expected one shared compact photographic print atlas")
+    if len(candidate) > 10_000_000:
+        raise RuntimeError(f"Environment exceeds its 10 MB download budget: {len(candidate)}")
+staging_path = output_path.with_name("room.pending.glb")
+staging_path.write_bytes(candidate)
+staging_path.replace(output_path)
 
 print(
     f"Exported {len(scene_meshes)} meshes / {triangle_count} triangles "
