@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 
-export type WindowType = 'project' | 'profile' | 'contact' | 'chat' | 'safari' | 'cv' | 'terminal' | 'recruiter';
+export type WindowType = 'project' | 'profile' | 'contact' | 'chat' | 'safari' | 'cv' | 'terminal';
 
 export interface WindowState {
   id: string;

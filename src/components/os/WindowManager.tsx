@@ -21,10 +21,8 @@ import TerminalWindow from '@/components/widgets/TerminalWindow';
 import { navigateBrowser, parseBrowserTarget } from '@/lib/browser';
 import type { TerminalAction } from '@/lib/terminal/types';
 import { GithubRepositoryService } from '@/lib/terminal/repo-filesystem';
-import RecruiterDialog from '@/components/recruiter/RecruiterDialog';
 
 interface WindowManagerProps {
-  onToggleLang: () => void;
   windows: WindowState[];
   onClose: (id: string) => void;
   onMinimize: (id: string) => void;
@@ -39,7 +37,6 @@ interface WindowManagerProps {
 }
 
 export default function WindowManager({
-  onToggleLang,
   windows,
   onClose,
   onMinimize,
@@ -82,12 +79,6 @@ export default function WindowManager({
   return (
     <AnimatePresence>
       {windows.filter(w => w.isOpen && !w.isMinimized).map((win) => {
-        if (win.type === 'recruiter') {
-          return <RecruiterDialog key={win.id} projects={projects} lang={lang} onToggleLang={onToggleLang}
-            onClose={() => closeApp(win.id)}
-            onOpenCv={() => { closeApp(win.id); onOpenWindow('cv', 'cv', 'CV · Adrian Gomez'); }}
-            onOpenContact={() => { closeApp(win.id); onOpenContact(); }} />;
-        }
         const project = win.type === 'project'
           ? projects.find(p => p.data.id === win.projectId)
           : undefined;

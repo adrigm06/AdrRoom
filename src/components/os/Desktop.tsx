@@ -13,8 +13,6 @@ import FolderIcon from './FolderIcon';
 import ZoneLegend from './ZoneLegend';
 import BotIcon from './BotIcon';
 import QuickLinks from '@/components/widgets/QuickLinks';
-import RecruiterShortcut from '@/components/recruiter/RecruiterShortcut';
-import { RECRUITER_WINDOW_ID } from '@/lib/recruiter';
 import { ZONE_COLORS } from '@/data/projects';
 import ContextMenu from './ContextMenu';
 import type { ContextMenuItem } from './ContextMenu';
@@ -425,7 +423,6 @@ export default function Desktop({ projects, embedded = false }: DesktopProps) {
           <div
             className="absolute transition-all duration-200 z-10 left-1/2 -translate-x-1/2 bottom-[88px] md:left-auto md:translate-x-0 md:right-7 md:bottom-6"
           >
-            <RecruiterShortcut lang={langState.lang} onOpen={() => openWindow(RECRUITER_WINDOW_ID, 'recruiter', t('recruiter_label'))} />
             <QuickLinks
               onOpenCv={() => openWindow('cv', 'cv', 'CV · Adrian Gomez')}
               lang={langState.lang}
@@ -439,7 +436,6 @@ export default function Desktop({ projects, embedded = false }: DesktopProps) {
 
         {/* ── Windows layer ── */}
         <WindowManager
-          onToggleLang={langState.toggleLang}
           onOpenWindow={openWindow}
           windows={windows}
           onClose={closeWindow}
