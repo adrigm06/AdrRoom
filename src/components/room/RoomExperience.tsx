@@ -3,6 +3,10 @@ import { Canvas } from '@react-three/fiber';
 import * as THREE from 'three';
 import { useLanguageState } from '@/hooks/useLanguage';
 import type { ProjectEntry } from '@/components/os/Desktop';
+import { AdrBotSessionProvider } from '@/components/widgets/AdrBotSession';
+import { useAdrBotSession } from '@/components/widgets/AdrBotSession';
+import type { FocusTarget } from './focus-targets';
+import type { RoomFocusState } from './useRoomFocus';
 import RoomScene from './RoomScene';
 import { RoomErrorBoundary, RoomLoadingStatus } from './RoomStatus';
 import './room.css';
@@ -11,11 +15,17 @@ interface RoomExperienceProps {
   projects: ProjectEntry[];
 }
 
-export default function RoomExperience({ projects }: RoomExperienceProps) {
-  const { lang, toggleLang } = useLanguageState();
-  const [focused, setFocused] = useState(false);
-  const focusMonitor = useRef<(() => void) | null>(null);
+function RoomExperienceContent({
+  projects,
+  lang,
+  toggleLang,
+}: RoomExperienceProps & { lang: 'es' | 'en'; toggleLang: () => void }) {
+  const chatSession = useAdrBotSession();
+  const [focusState, setFocusState] = useState<RoomFocusState>({ target: null, phase: 'room' });
+  const canvasContainer = useRef<HTMLDivElement>(null);
+  const focusTarget = useRef<((target: FocusTarget) => void) | null>(null);
   const returnToRoom = useRef<(() => void) | null>(null);
+  const focused = focusState.phase !== 'room';
 
   useEffect(() => {
     document.documentElement.lang = lang;
@@ -39,10 +49,30 @@ export default function RoomExperience({ projects }: RoomExperienceProps) {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [focused]);
 
+  useEffect(() => {
+    if (!focused) return;
+    const container = canvasContainer.current;
+    if (!container) return;
+
+    const returnOnOutsidePointerDown = (event: PointerEvent) => {
+      const target = event.target;
+      if (
+        target instanceof Element
+        && target.closest('.room-screen-html, .robot-hologram-html')
+      ) return;
+
+      returnToRoom.current?.();
+    };
+
+    container.addEventListener('pointerdown', returnOnOutsidePointerDown);
+    return () => container.removeEventListener('pointerdown', returnOnOutsidePointerDown);
+  }, [focused]);
+
   const isSpanish = lang === 'es';
   return (
     <main className={`room-experience${focused ? ' room-experience--focused' : ''}`} lang={lang}>
       <div
+        ref={canvasContainer}
         className="room-experience__canvas"
         aria-label={isSpanish ? 'Habitación 3D interactiva' : 'Interactive 3D room'}
       >
@@ -81,9 +111,10 @@ export default function RoomExperience({ projects }: RoomExperienceProps) {
               <RoomScene
                 lang={lang}
                 projects={projects}
-                focused={focused}
-                onFocusChange={setFocused}
-                focusCommand={focusMonitor}
+                chatSession={chatSession}
+                focusState={focusState}
+                onFocusStateChange={setFocusState}
+                focusCommand={focusTarget}
                 returnCommand={returnToRoom}
               />
             </Suspense>
@@ -118,7 +149,7 @@ export default function RoomExperience({ projects }: RoomExperienceProps) {
           <button
             className="room-skip"
             type="button"
-            onClick={() => focusMonitor.current?.()}
+            onClick={() => focusTarget.current?.('monitor')}
             aria-label={isSpanish ? 'Abrir portfolio en el monitor' : 'Open portfolio on the monitor'}
           >
             {isSpanish ? 'Abrir portfolio' : 'Open portfolio'}
@@ -137,5 +168,14 @@ export default function RoomExperience({ projects }: RoomExperienceProps) {
         </button>
       )}
     </main>
+  );
+}
+
+export default function RoomExperience({ projects }: RoomExperienceProps) {
+  const { lang, toggleLang } = useLanguageState();
+  return (
+    <AdrBotSessionProvider lang={lang}>
+      <RoomExperienceContent projects={projects} lang={lang} toggleLang={toggleLang} />
+    </AdrBotSessionProvider>
   );
 }

@@ -1,0 +1,407 @@
+.robot-hologram {
+  position: relative;
+  display: flex;
+  width: 760px;
+  height: 520px;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+  border: 1px solid rgb(114 237 255 / 82%);
+  color: #e4fbff;
+  background:
+    linear-gradient(145deg, rgb(10 27 39 / 84%), rgb(7 15 25 / 79%) 55%, rgb(9 28 42 / 84%));
+  -webkit-backdrop-filter: blur(6px) saturate(1.28);
+  backdrop-filter: blur(6px) saturate(1.28);
+  box-shadow:
+    0 0 0 1px rgb(124 241 255 / 60%),
+    0 0 0 5px rgb(66 217 255 / 11%),
+    0 0 28px rgb(46 216 255 / 38%),
+    0 18px 58px rgb(0 0 0 / 38%),
+    inset 0 0 34px rgb(79 220 255 / 13%);
+  font-family: Inter, Arial, sans-serif;
+  transform-origin: center bottom;
+}
+
+.robot-hologram::before,
+.robot-hologram::after {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  content: '';
+  pointer-events: none;
+}
+
+.robot-hologram::before {
+  opacity: 0.16;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 3px,
+    rgb(121 233 255 / 18%) 4px
+  );
+}
+
+.robot-hologram::after {
+  border: 8px solid rgb(76 225 255 / 5%);
+  box-shadow:
+    inset 0 0 0 1px rgb(119 234 255 / 20%),
+    inset 0 0 32px rgb(78 222 255 / 8%);
+}
+
+.robot-hologram--deploying {
+  animation: hologram-deploy 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.robot-hologram--dismissing {
+  animation: hologram-dismiss 500ms cubic-bezier(0.7, 0, 0.84, 0) both;
+}
+
+.robot-hologram__header {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  min-height: 70px;
+  align-items: center;
+  gap: 13px;
+  padding: 0 24px;
+  border-bottom: 1px solid rgb(115 227 255 / 27%);
+  background: rgb(45 164 196 / 11%);
+}
+
+.robot-hologram__sigil {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid rgb(131 239 255 / 65%);
+  border-radius: 50%;
+  color: #8cf1ff;
+  font-family: Georgia, serif;
+  font-size: 23px;
+  font-style: italic;
+  box-shadow: 0 0 17px rgb(75 221 255 / 20%);
+}
+
+.robot-hologram__identity {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.robot-hologram__identity strong {
+  color: #edfcff;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.robot-hologram__identity small,
+.robot-hologram__status,
+.robot-hologram__footer {
+  color: #9fcbd4;
+  font-size: 10px;
+  letter-spacing: 0.11em;
+}
+
+.robot-hologram__status {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-left: auto;
+}
+
+.robot-hologram__status i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #9af5cf;
+  box-shadow: 0 0 11px rgb(111 255 207 / 85%);
+}
+
+.robot-hologram__messages {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 15px;
+  overflow-y: auto;
+  padding: 23px 25px 18px;
+  scrollbar-color: rgb(103 220 244 / 45%) transparent;
+  scrollbar-width: thin;
+}
+
+.robot-hologram__message {
+  display: flex;
+  width: fit-content;
+  max-width: 82%;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.robot-hologram__message--user {
+  align-self: flex-end;
+}
+
+.robot-hologram__message p {
+  margin: 0;
+  padding: 12px 15px;
+  border: 1px solid rgb(110 223 246 / 19%);
+  border-radius: 3px 12px 12px 12px;
+  color: #e5f8fb;
+  background: rgb(23 53 68 / 93%);
+  font-size: 16px;
+  line-height: 1.48;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.robot-hologram__message--user p {
+  border-color: rgb(102 229 255 / 42%);
+  border-radius: 12px 3px 12px 12px;
+  background: rgb(24 105 128 / 91%);
+}
+
+.robot-hologram__message-mark {
+  display: grid;
+  width: 25px;
+  height: 25px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid rgb(123 232 250 / 44%);
+  border-radius: 50%;
+  color: #9af2ff;
+  font-family: Georgia, serif;
+  font-size: 16px;
+  font-style: italic;
+}
+
+.robot-hologram__thinking {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #a8dbe3;
+  font-size: 13px;
+}
+
+.robot-hologram__thinking span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #8deeff;
+  animation: hologram-thinking 900ms ease-in-out infinite alternate;
+}
+
+.robot-hologram__thinking span:nth-child(2) {
+  animation-delay: 160ms;
+}
+
+.robot-hologram__thinking span:nth-child(3) {
+  margin-right: 4px;
+  animation-delay: 320ms;
+}
+
+.robot-hologram__composer {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  min-height: 66px;
+  align-items: center;
+  gap: 12px;
+  margin: 0 22px 13px;
+  padding: 0 9px 0 16px;
+  border: 1px solid rgb(115 227 255 / 54%);
+  border-radius: 3px;
+  background: rgb(5 17 26 / 96%);
+  box-shadow: inset 0 0 15px rgb(72 215 248 / 8%);
+}
+
+.robot-hologram__composer:focus-within {
+  border-color: #a1f1ff;
+  box-shadow:
+    0 0 0 2px rgb(70 216 249 / 14%),
+    0 0 18px rgb(70 216 249 / 32%),
+    inset 0 0 15px rgb(72 215 248 / 10%);
+}
+
+.robot-hologram__composer input {
+  cursor: text;
+  pointer-events: auto;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.robot-hologram__composer input {
+  width: 0;
+  min-width: 0;
+  flex: 1;
+  border: 0;
+  outline: 0;
+  color: #effcff;
+  background: transparent;
+  font: inherit;
+  font-size: 15px;
+}
+
+.robot-hologram__composer input::placeholder {
+  color: #8dafb7;
+  opacity: 1;
+}
+
+.robot-hologram__composer button {
+  display: flex;
+  min-width: 92px;
+  min-height: 43px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid rgb(133 236 255 / 58%);
+  border-radius: 2px;
+  color: #e4fbff;
+  background: rgb(40 130 151 / 56%);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color 150ms ease, border-color 150ms ease;
+}
+
+.robot-hologram__composer button:hover:not(:disabled) {
+  border-color: #a7f4ff;
+  background: rgb(48 171 196 / 76%);
+}
+
+.robot-hologram__composer button:focus-visible {
+  outline: 2px solid #a7f4ff;
+  outline-offset: 3px;
+}
+
+.robot-hologram__composer button:disabled {
+  cursor: not-allowed;
+  opacity: 0.52;
+}
+
+.robot-hologram__composer button svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.5;
+}
+
+.robot-hologram__footer {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 25px 15px;
+  font-size: 8px;
+}
+
+.robot-hologram__glitch-line {
+  position: absolute;
+  z-index: 5;
+  left: -4%;
+  width: 108%;
+  height: 2px;
+  opacity: 0;
+  background: #9cf5ff;
+  box-shadow: 0 0 10px #56dbff;
+  pointer-events: none;
+}
+
+.robot-hologram__glitch-line--one { top: 24%; }
+.robot-hologram__glitch-line--two { top: 57%; }
+.robot-hologram__glitch-line--three { top: 83%; }
+
+.robot-hologram__scan-beam {
+  position: absolute;
+  z-index: 4;
+  top: -24%;
+  left: 0;
+  width: 100%;
+  height: 14%;
+  opacity: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgb(91 230 255 / 8%) 44%,
+    rgb(154 246 255 / 25%) 50%,
+    rgb(91 230 255 / 8%) 56%,
+    transparent
+  );
+  filter: blur(2px);
+  pointer-events: none;
+}
+
+.robot-hologram--live .robot-hologram__scan-beam {
+  opacity: 1;
+  animation: hologram-scan 6.8s linear infinite;
+}
+
+.robot-hologram.is-glitching .robot-hologram__glitch-line {
+  opacity: 0.8;
+}
+
+.robot-hologram.is-glitching .robot-hologram__glitch-line--one {
+  animation: hologram-slice-one 130ms steps(2, end) 3;
+}
+
+.robot-hologram.is-glitching .robot-hologram__glitch-line--two {
+  animation: hologram-slice-two 120ms steps(2, end) 3;
+}
+
+.robot-hologram.is-glitching .robot-hologram__glitch-line--three {
+  animation: hologram-slice-one 150ms steps(2, end) 2;
+}
+
+@keyframes hologram-deploy {
+  0% { opacity: 0; transform: translateY(22px) scaleY(0.06); filter: brightness(2.6); }
+  62% { opacity: 1; transform: translateY(-2px) scaleY(1.02); filter: brightness(1.5); }
+  100% { opacity: 1; transform: translateY(0) scaleY(1); filter: brightness(1); }
+}
+
+@keyframes hologram-dismiss {
+  to { opacity: 0; transform: translateY(11px) scaleY(0.94); filter: brightness(1.8); }
+}
+
+@keyframes hologram-thinking {
+  to { opacity: 0.35; transform: scale(0.68); }
+}
+
+@keyframes hologram-scan {
+  from { transform: translateY(-20%); }
+  to { transform: translateY(900%); }
+}
+
+@keyframes hologram-slice-one {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(12px); }
+}
+
+@keyframes hologram-slice-two {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-10px); }
+}
+
+@media (max-width: 760px) {
+  .robot-hologram { width: 360px; }
+  .robot-hologram__header { min-height: 62px; padding: 0 19px; }
+  .robot-hologram__messages { gap: 12px; padding: 18px 19px 14px; }
+  .robot-hologram__message p { padding: 10px 12px; font-size: 15px; }
+  .robot-hologram__composer { min-height: 60px; margin: 0 16px 11px; }
+  .robot-hologram__composer button { min-width: 76px; }
+  .robot-hologram__footer { padding-right: 19px; padding-left: 19px; }
+  .robot-hologram__status { font-size: 8px; letter-spacing: 0.06em; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .robot-hologram--deploying,
+  .robot-hologram--dismissing,
+  .robot-hologram__thinking span,
+  .robot-hologram.is-glitching .robot-hologram__glitch-line {
+    animation: none;
+  }
+}

@@ -144,6 +144,31 @@
   background: #171916ee;
 }
 
+.room-robot-accessible {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.room-robot-accessible:focus-visible {
+  z-index: 10;
+  width: max-content;
+  height: auto;
+  padding: 10px 13px;
+  clip-path: none;
+  border: 1px solid #8deeff;
+  color: #e4fbff;
+  background: #0b1b27;
+  font: inherit;
+  font-size: 12px;
+  outline: 2px solid #8deeff;
+  outline-offset: 4px;
+  cursor: pointer;
+}
+
 .room-loader {
   display: flex;
   align-items: center;

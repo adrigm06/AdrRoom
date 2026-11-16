@@ -2,10 +2,12 @@ import { useEffect, useMemo, useRef } from 'react';
 import { useGLTF } from '@react-three/drei';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
+import { normalizeRoomObjectName } from './model-object-names';
 
 const MODEL_URL = '/models/room.glb';
 const EYE_NAMES = new Set(['Robot_pet_|_eye', 'Robot_pet_|_eye001']);
-const BEZEL_NAME = 'Monitor | bezel';
+const BEZEL_NAME = 'monitor bezel';
+const SHELL_NAME = 'robot pet rounded shell';
 const PANORAMA_MASK_NAME = 'panorama depth mask';
 const EYE_TRAVEL = { x: 0.026, y: 0.018 };
 
@@ -15,20 +17,36 @@ interface EmissiveMaterialState {
   intensity: number;
 }
 
-export default function RoomModel({ monitorHovered = false }: { monitorHovered?: boolean }) {
-  const { scene } = useGLTF(MODEL_URL);
+export interface RobotMouthCommands {
+  play: (open: boolean) => void;
+}
+
+interface RoomModelProps {
+  monitorHovered?: boolean;
+  robotHovered?: boolean;
+  mouthCommands: { current: RobotMouthCommands | null };
+}
+
+export default function RoomModel({
+  monitorHovered = false,
+  robotHovered = false,
+  mouthCommands,
+}: RoomModelProps) {
+  const { scene, animations } = useGLTF(MODEL_URL);
   const canvas = useThree((state) => state.gl.domElement);
   const eyes = useRef<THREE.Object3D[]>([]);
   const pointer = useRef(new THREE.Vector2());
   const reducedMotion = useRef(false);
   const bezelMaterials = useRef<EmissiveMaterialState[]>([]);
+  const shellMaterials = useRef<EmissiveMaterialState[]>([]);
   const model = useMemo(() => {
     const copy = scene.clone(true);
     const foundEyes: THREE.Object3D[] = [];
     const oldBackdrop: THREE.Object3D[] = [];
     const clonedBezelMaterials: EmissiveMaterialState[] = [];
+    const clonedShellMaterials: EmissiveMaterialState[] = [];
     copy.traverse((object) => {
-      const normalizedName = object.name.toLowerCase().replace(/[_|]+/g, ' ');
+      const normalizedName = normalizeRoomObjectName(object.name);
       if (
         object instanceof THREE.Mesh
         && normalizedName.includes(PANORAMA_MASK_NAME)
@@ -45,7 +63,7 @@ export default function RoomModel({ monitorHovered = false }: { monitorHovered?:
         object.userData.home = object.position.clone();
         foundEyes.push(object);
       }
-      if (object.name === BEZEL_NAME && object instanceof THREE.Mesh) {
+      if (normalizedName === BEZEL_NAME && object instanceof THREE.Mesh) {
         const originals = Array.isArray(object.material) ? object.material : [object.material];
         const clones = originals.map((original) => original.clone());
         object.material = Array.isArray(object.material) ? clones : clones[0];
@@ -59,9 +77,23 @@ export default function RoomModel({ monitorHovered = false }: { monitorHovered?:
           }
         }
       }
+      if (normalizedName === SHELL_NAME && object instanceof THREE.Mesh) {
+        const originals = Array.isArray(object.material) ? object.material : [object.material];
+        const clones = originals.map((original) => original.clone());
+        object.material = Array.isArray(object.material) ? clones : clones[0];
+        for (const material of clones) {
+          if (material instanceof THREE.MeshStandardMaterial) {
+            clonedShellMaterials.push({
+              material,
+              color: material.emissive.clone(),
+              intensity: material.emissiveIntensity,
+            });
+          }
+        }
+      }
       if (
-        object.name.startsWith('Exterior |')
-        || object.name.startsWith('Distant city |')
+        normalizedName.startsWith('exterior ')
+        || normalizedName.startsWith('distant city ')
       ) {
         oldBackdrop.push(object);
       }
@@ -69,8 +101,36 @@ export default function RoomModel({ monitorHovered = false }: { monitorHovered?:
     for (const object of oldBackdrop) object.removeFromParent();
     eyes.current = foundEyes;
     bezelMaterials.current = clonedBezelMaterials;
+    shellMaterials.current = clonedShellMaterials;
     return copy;
   }, [scene]);
+
+  const mouthAnimation = useMemo(() => {
+    const clip = animations.find((animation) => animation.name === 'AN_Robot_Mouth_Projection');
+    if (!clip) return null;
+    const mixer = new THREE.AnimationMixer(model);
+    return { mixer, action: mixer.clipAction(clip), duration: clip.duration };
+  }, [animations, model]);
+
+  useEffect(() => {
+    const play = (open: boolean) => {
+      const animation = mouthAnimation;
+      if (!animation) return;
+      const { action, duration } = animation;
+      action.stop();
+      action.reset();
+      action.setLoop(THREE.LoopOnce, 1);
+      action.clampWhenFinished = true;
+      action.timeScale = open ? 1 : -1;
+      action.time = open ? 0 : duration;
+      action.play();
+    };
+    mouthCommands.current = { play };
+    return () => {
+      mouthCommands.current = null;
+      mouthAnimation?.mixer.stopAllAction();
+    };
+  }, [mouthAnimation, mouthCommands]);
 
   useEffect(() => {
     const media = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -109,7 +169,15 @@ export default function RoomModel({ monitorHovered = false }: { monitorHovered?:
     }
   }, [monitorHovered]);
 
+  useEffect(() => {
+    for (const { material, color, intensity } of shellMaterials.current) {
+      material.emissive.copy(robotHovered ? new THREE.Color('#319cff') : color);
+      material.emissiveIntensity = robotHovered ? 0.72 : intensity;
+    }
+  }, [robotHovered]);
+
   useFrame((_, delta) => {
+    mouthAnimation?.mixer.update(delta);
     for (const eye of eyes.current) {
       const home = eye.userData.home as THREE.Vector3;
       const targetX = home.x + pointer.current.x * EYE_TRAVEL.x;
