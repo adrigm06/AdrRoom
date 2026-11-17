@@ -1,23 +1,19 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Html } from '@react-three/drei';
-import { useThree } from '@react-three/fiber';
+import type { RefObject } from 'react';
 import type { Lang } from '@/hooks/useLanguage';
 import type { AdrBotMessage, AdrBotSessionValue } from '@/components/widgets/AdrBotSession';
-import RobotHologramEffects from './RobotHologramEffects';
-import { PANEL_POSITION } from './projection-layout';
 import './robot-hologram.css';
 
-type ProjectionMode = 'deploying' | 'live' | 'dismissing';
+export type HologramMode = 'deploying' | 'live' | 'dismissing';
 
 interface RobotHologramProps {
   lang: Lang;
-  mode: ProjectionMode;
+  mode: HologramMode;
   interactive: boolean;
   chatSession: AdrBotSessionValue;
+  panelAnchorRef: RefObject<HTMLDivElement | null>;
 }
 
-const PANEL_DISTANCE_FACTOR = 0.92 * 400 / 760;
-const MOBILE_PANEL_WIDTH = 360;
 const LABEL: Record<Lang, { placeholder: string; send: string; status: string; title: string }> = {
   es: {
     placeholder: 'Pregunta a AdrBOT sobre proyectos o experiencia…',
@@ -157,8 +153,8 @@ export default function RobotHologram({
   mode,
   interactive,
   chatSession,
+  panelAnchorRef,
 }: RobotHologramProps) {
-  const viewportWidth = useThree((state) => state.size.width);
   const [glitching, setGlitching] = useState(false);
   const glitchTimeout = useRef<number | null>(null);
   const resetTimeout = useRef<number | null>(null);
@@ -187,32 +183,24 @@ export default function RobotHologram({
   }, []);
 
   return (
-    <group>
-      <RobotHologramEffects mode={mode} />
-      <Html
-        transform
-        position={PANEL_POSITION}
-        distanceFactor={PANEL_DISTANCE_FACTOR * (
-          viewportWidth <= 760 ? 760 / MOBILE_PANEL_WIDTH : 1
-        )}
-        zIndexRange={[40, 30]}
-        className="robot-hologram-html"
-        pointerEvents={interactive ? 'auto' : 'none'}
-      >
-        <section
-          className={`robot-hologram robot-hologram--${mode}${glitching ? ' is-glitching' : ''}`}
-          style={{ pointerEvents: interactive ? 'auto' : 'none' }}
-          lang={lang}
-          aria-label={LABEL[lang].title}
-          inert={!interactive}
-        >
-          <span className="robot-hologram__glitch-line robot-hologram__glitch-line--one" aria-hidden="true" />
-          <span className="robot-hologram__glitch-line robot-hologram__glitch-line--two" aria-hidden="true" />
-          <span className="robot-hologram__glitch-line robot-hologram__glitch-line--three" aria-hidden="true" />
-          <span className="robot-hologram__scan-beam" aria-hidden="true" />
-          <HologramChat lang={lang} interactive={interactive} chatSession={chatSession} />
-        </section>
-      </Html>
-    </group>
+    <div className="robot-hologram-overlay">
+      <div className="robot-hologram-anchor" ref={panelAnchorRef}>
+        <div className="robot-hologram-frame">
+          <section
+            className={`robot-hologram robot-hologram--${mode}${glitching ? ' is-glitching' : ''}`}
+            style={{ pointerEvents: interactive ? 'auto' : 'none' }}
+            lang={lang}
+            aria-label={LABEL[lang].title}
+            inert={!interactive}
+          >
+            <span className="robot-hologram__glitch-line robot-hologram__glitch-line--one" aria-hidden="true" />
+            <span className="robot-hologram__glitch-line robot-hologram__glitch-line--two" aria-hidden="true" />
+            <span className="robot-hologram__glitch-line robot-hologram__glitch-line--three" aria-hidden="true" />
+            <span className="robot-hologram__scan-beam" aria-hidden="true" />
+            <HologramChat lang={lang} interactive={interactive} chatSession={chatSession} />
+          </section>
+        </div>
+      </div>
+    </div>
   );
 }

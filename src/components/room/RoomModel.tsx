@@ -25,12 +25,14 @@ interface RoomModelProps {
   monitorHovered?: boolean;
   robotHovered?: boolean;
   mouthCommands: { current: RobotMouthCommands | null };
+  onReady?: () => void;
 }
 
 export default function RoomModel({
   monitorHovered = false,
   robotHovered = false,
   mouthCommands,
+  onReady,
 }: RoomModelProps) {
   const { scene, animations } = useGLTF(MODEL_URL);
   const canvas = useThree((state) => state.gl.domElement);
@@ -111,6 +113,10 @@ export default function RoomModel({
     const mixer = new THREE.AnimationMixer(model);
     return { mixer, action: mixer.clipAction(clip), duration: clip.duration };
   }, [animations, model]);
+
+  useEffect(() => {
+    onReady?.();
+  }, [onReady]);
 
   useEffect(() => {
     const play = (open: boolean) => {

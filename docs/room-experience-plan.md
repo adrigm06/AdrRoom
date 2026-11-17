@@ -6,12 +6,12 @@ Projects remain in AdrOS; the room adds context rather than duplicating them.
 
 ## Status and delivery gates
 
-The user confirmed the current CV as the research source. This document records
-the plan only; implementation has not started.
+The user confirmed the current CV as the research source. Iteration 1 is
+accepted; iteration 2 is authorized and begins after iteration 1 is delivered.
 
 | Iteration | Scope | Status | Planned commit |
 | --- | --- | --- | --- |
-| 1 | First-visit discovery and interaction hints | Pending | `feat(room): add first-visit discovery and interaction hints` |
+| 1 | First-visit discovery and interaction hints | Accepted | `feat(room): add first-visit discovery and interaction hints` |
 | 2 | Career corkboard and skill library | Pending | `feat(room): add career board and skill library` |
 | 3 | Madrid-time lighting and panorama cycle | Pending; three photos required | `feat(room): add Madrid-time lighting and panorama cycle` |
 | 4 | AdrRoom making-of notebook | Pending | `feat(room): add the AdrRoom making-of notebook` |
@@ -321,11 +321,22 @@ For every implementation iteration:
 - Keep the iteration's code, tests, documentation and generated runtime assets
   together so its commit can be reverted without removing unrelated work.
 
-For this planning-only document:
+Iteration 1 verification:
 
-- Verification: review scope/privacy instructions and run `git diff --cached --check`.
-- Runtime harness: N/A, no application behavior changes.
-- Rollback boundary: remove only `docs/room-experience-plan.md`.
+- Focused room regression and discovery tests: `npm test -- --run
+  tests/room-discovery.test.ts tests/room-focus.test.ts
+  tests/room-projection.test.ts tests/room-model.test.ts`.
+- Full automated checks: `npm test`, `npm run lint`,
+  `npm run type-check:ci` and `npm run build:ci`.
+- Browser harness: `http://127.0.0.1:4321/`. The available browser could not
+  create a WebGL scene, so it rendered the existing fallback; verified that the
+  welcome and room actions stay hidden on that failure path. Scene interaction
+  QA still requires a browser with WebGL and the user's manual acceptance.
+- Rollback boundary: remove the iteration 1 changes in
+  `src/components/room/RoomExperience.tsx`, `RoomModel.tsx`, `RoomMonitor.tsx`,
+  `RoomScene.tsx`, `RoomStatus.tsx`, `room-discovery.ts`, `useRoomFocus.ts`,
+  `room.css`, and `tests/room-discovery.test.ts`; revert the iteration 1 status
+  and verification text in this plan.
 
 ## Technical references
 
@@ -337,5 +348,6 @@ For this planning-only document:
 
 ## Next action
 
-Start iteration 1 only when the user requests implementation. Stop after its
-automated checks and browser QA so the user can test it manually.
+Iteration 1 was accepted when the user requested continuation. Deliver it as a
+separate work unit, then implement iteration 2. Stop after iteration 2's
+automated checks and browser QA for manual testing and public-copy review.

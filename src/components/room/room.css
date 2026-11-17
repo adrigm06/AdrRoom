@@ -93,10 +93,37 @@
   background: #edcf98;
 }
 
+.room-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  pointer-events: auto;
+}
+
+.room-help {
+  padding: 8px 10px;
+  border: 1px solid #f2eee533;
+  color: #e5dfd2;
+  background: #17191688;
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.room-help:hover {
+  border-color: #d3b98799;
+  color: #edcf98;
+}
+
 .room-language button:focus-visible,
+.room-help:focus-visible,
 .room-skip:focus-visible,
+.room-robot-shortcut:focus-visible,
 .room-return:focus-visible,
-.room-wordmark:focus-visible {
+.room-wordmark:focus-visible,
+.room-welcome button:focus-visible {
   outline: 2px solid #d3b987;
   outline-offset: 4px;
 }
@@ -122,10 +149,10 @@
 }
 
 .room-skip,
+.room-robot-shortcut,
 .room-return {
   position: absolute;
   z-index: 3;
-  right: 38px;
   bottom: 29px;
   padding: 11px 15px;
   border: 1px solid #f2eee566;
@@ -138,13 +165,26 @@
   transition: background-color 160ms ease, border-color 160ms ease;
 }
 
+.room-skip {
+  right: 38px;
+}
+
+.room-robot-shortcut {
+  left: 38px;
+}
+
+.room-return {
+  right: 38px;
+}
+
 .room-skip:hover,
+.room-robot-shortcut:hover,
 .room-return:hover {
   border-color: #d3b98799;
   background: #171916ee;
 }
 
-.room-robot-accessible {
+.room-object-accessible {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -153,7 +193,7 @@
   white-space: nowrap;
 }
 
-.room-robot-accessible:focus-visible {
+.room-object-accessible:focus-visible {
   z-index: 10;
   width: max-content;
   height: auto;
@@ -167,6 +207,131 @@
   outline: 2px solid #8deeff;
   outline-offset: 4px;
   cursor: pointer;
+}
+
+.room-interaction-label {
+  display: block;
+  min-height: 34px;
+  padding: 8px 12px;
+  border: 1px solid #d3b9878c;
+  color: #f4eddf;
+  background: #171916e8;
+  font: 500 11px/1.2 'Inter', system-ui, sans-serif;
+  white-space: nowrap;
+  cursor: pointer;
+  pointer-events: auto;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.room-interaction-label:hover,
+.room-interaction-label:focus-visible {
+  border-color: #edcf98;
+  color: #fff8e9;
+  background: #20241d;
+}
+
+.room-interaction-label:focus-visible {
+  outline: 2px solid #d3b987;
+  outline-offset: 3px;
+}
+
+.room-welcome {
+  position: absolute;
+  z-index: 4;
+  bottom: 82px;
+  left: 38px;
+  width: min(390px, calc(100vw - 40px));
+  padding: 23px 24px 18px;
+  border: 1px solid #d3b98770;
+  color: #f1eee6;
+  background: #171916f2;
+  box-shadow: 0 16px 48px #080a08a6;
+}
+
+.room-welcome__close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  color: #d8d2c7;
+  background: transparent;
+  font: inherit;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.room-welcome__eyebrow {
+  margin: 0 0 8px;
+  color: #d3b987;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+
+.room-welcome h1 {
+  max-width: 300px;
+  margin: 0;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(22px, 3vw, 28px);
+  font-weight: 400;
+  letter-spacing: -0.035em;
+  line-height: 1.12;
+}
+
+.room-welcome__copy {
+  max-width: 320px;
+  margin: 10px 0 17px;
+  color: #d5d1c8;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.room-welcome__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.room-welcome__actions button {
+  min-height: 40px;
+  padding: 9px 12px;
+  border: 1px solid #d3b9878c;
+  color: #f1eee6;
+  background: #242820;
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.room-welcome__actions button:first-child {
+  color: #171916;
+  background: #edcf98;
+}
+
+.room-welcome__actions button:hover {
+  border-color: #edcf98;
+}
+
+.room-welcome__dismiss {
+  margin-top: 13px;
+  padding: 5px 0;
+  border: 0;
+  color: #c8c2b6;
+  background: transparent;
+  font: inherit;
+  font-size: 11px;
+  text-decoration: underline;
+  text-decoration-color: #c8c2b666;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .room-loader {
@@ -250,6 +415,14 @@
     padding: 20px;
   }
 
+  .room-header__actions {
+    gap: 7px;
+  }
+
+  .room-help {
+    padding: 7px 8px;
+  }
+
   .room-hint {
     bottom: 25px;
     left: 20px;
@@ -258,11 +431,38 @@
   }
 
   .room-skip,
+  .room-robot-shortcut,
   .room-return {
-    right: 20px;
     bottom: 17px;
     padding: 10px 11px;
     font-size: 11px;
+  }
+
+  .room-skip {
+    right: 20px;
+  }
+
+  .room-return {
+    right: 20px;
+  }
+
+  .room-robot-shortcut {
+    left: 20px;
+  }
+
+  .room-welcome {
+    bottom: 70px;
+    left: 20px;
+    padding: 20px 18px 15px;
+  }
+
+  .room-welcome__actions {
+    flex-direction: column;
+  }
+
+  .room-welcome__actions button {
+    width: 100%;
+    text-align: left;
   }
 
 }
@@ -274,6 +474,7 @@
 
   .room-experience::before,
   .room-skip,
+  .room-robot-shortcut,
   .room-return {
     transition: none;
   }

@@ -6,6 +6,7 @@ import * as THREE from 'three';
 import Desktop from '@/components/os/Desktop';
 import type { ProjectEntry } from '@/components/os/Desktop';
 import type { Lang } from '@/hooks/useLanguage';
+import { isIntentionalRoomActivation } from './room-discovery';
 
 const PREVIEW_IMAGES = [
   '/adr-os-preview-es.webp',
@@ -79,6 +80,7 @@ export default function RoomMonitor({
             position={HIT_POSITION}
             onClick={(event) => {
               event.stopPropagation();
+              if (!isIntentionalRoomActivation(event.delta)) return;
               document.body.style.cursor = '';
               onHoverChange(false);
               onOpen();
@@ -103,6 +105,41 @@ export default function RoomMonitor({
             />
           </mesh>
           {hovered && <MonitorGlow />}
+          <Html
+            position={[0, 2.12, -1.35]}
+            center
+            distanceFactor={12}
+            zIndexRange={[12, 0]}
+          >
+            {hovered && (
+              <button
+                className="room-interaction-label"
+                type="button"
+                onPointerEnter={() => onHoverChange(true)}
+                onPointerLeave={() => onHoverChange(false)}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onOpen();
+                }}
+              >
+                {lang === 'es' ? 'Abrir el portfolio' : 'Open the portfolio'}
+              </button>
+            )}
+          </Html>
+          <Html
+            position={[0, 1.56, -1.35]}
+            center
+            distanceFactor={12}
+            zIndexRange={[12, 0]}
+          >
+            <button
+              className="room-object-accessible"
+              type="button"
+              onClick={onOpen}
+            >
+              {lang === 'es' ? 'Abrir el portfolio en el PC' : 'Open the portfolio on the PC'}
+            </button>
+          </Html>
         </>
       )}
     </>

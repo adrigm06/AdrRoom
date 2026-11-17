@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { Component, useEffect } from 'react';
 import type { ErrorInfo, ReactNode } from 'react';
 import { useProgress } from '@react-three/drei';
 
@@ -7,6 +7,7 @@ type Lang = 'es' | 'en';
 interface RoomErrorBoundaryProps {
   children: ReactNode;
   lang: Lang;
+  onFailure?: () => void;
 }
 
 interface RoomErrorBoundaryState {
@@ -28,6 +29,33 @@ export function RoomLoadingStatus({ lang }: { lang: Lang }) {
   );
 }
 
+export function RoomCanvasFallback({
+  lang,
+  onFailure,
+}: {
+  lang: Lang;
+  onFailure: () => void;
+}) {
+  useEffect(() => onFailure(), [onFailure]);
+
+  const isSpanish = lang === 'es';
+  return (
+    <div className="room-fallback" role="alert">
+      <img
+        src="/room-preview.png"
+        width="1440"
+        height="960"
+        alt={isSpanish ? 'Vista previa de la habitación de AdrRoom' : 'AdrRoom room preview'}
+      />
+      <p>
+        {isSpanish
+          ? 'Este navegador no puede mostrar la escena 3D.'
+          : 'This browser cannot display the 3D room.'}
+      </p>
+    </div>
+  );
+}
+
 export class RoomErrorBoundary extends Component<
   RoomErrorBoundaryProps,
   RoomErrorBoundaryState
@@ -39,6 +67,7 @@ export class RoomErrorBoundary extends Component<
   }
 
   componentDidCatch(error: Error, info: ErrorInfo) {
+    this.props.onFailure?.();
     console.error('The room scene could not be loaded.', error, info);
   }
 

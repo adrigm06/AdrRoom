@@ -52,6 +52,12 @@ export default function useRoomFocus({
     if (camera instanceof THREE.PerspectiveCamera) camera.updateProjectionMatrix();
   }, [camera, controls]);
 
+  const prefersReducedMotion = useCallback(() => (
+    typeof window !== 'undefined'
+    && typeof window.matchMedia === 'function'
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  ), []);
+
   const focus = useCallback((targetId: FocusTarget): Promise<boolean> => {
     const control = controls.current;
     const current = stateRef.current;
@@ -81,6 +87,16 @@ export default function useRoomFocus({
     control.enabled = false;
     publish({ target: targetId, phase: 'approaching' });
 
+    if (prefersReducedMotion()) {
+      camera.position.copy(position);
+      control.target.copy(config.center);
+      camera.fov = config.fov;
+      updateCamera();
+      timeline.current = null;
+      publish({ target: targetId, phase: 'focused' });
+      return Promise.resolve(true);
+    }
+
     return new Promise((resolve) => {
       timeline.current?.kill();
       timeline.current = gsap.timeline({
@@ -107,7 +123,7 @@ export default function useRoomFocus({
         }, 0)
         .to(camera, { fov: config.fov, duration: 1.1, ease: 'power3.inOut' }, 0);
     });
-  }, [camera, controls, publish, updateCamera, viewport.height, viewport.width]);
+  }, [camera, controls, prefersReducedMotion, publish, updateCamera, viewport.height, viewport.width]);
 
   const returnToRoom = useCallback((): Promise<void> => {
     const previous = snapshot.current;
@@ -122,6 +138,15 @@ export default function useRoomFocus({
     control.enabled = false;
     publish({ target: stateRef.current.target, phase: 'returning' });
     timeline.current?.kill();
+
+    if (prefersReducedMotion()) {
+      camera.position.copy(previous.position);
+      control.target.copy(previous.target);
+      camera.fov = previous.fov;
+      updateCamera();
+      timeline.current = null;
+      return Promise.resolve();
+    }
 
     return new Promise((resolve) => {
       timeline.current = gsap.timeline({
@@ -144,7 +169,7 @@ export default function useRoomFocus({
         }, 0)
         .to(camera, { fov: previous.fov, duration: 0.95, ease: 'power3.inOut' }, 0);
     });
-  }, [camera, controls, publish, updateCamera]);
+  }, [camera, controls, prefersReducedMotion, publish, updateCamera]);
 
   const finishReturn = useCallback(() => {
     const control = controls.current;

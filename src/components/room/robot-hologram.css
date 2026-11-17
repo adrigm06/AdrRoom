@@ -1,8 +1,28 @@
+.robot-hologram-overlay {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  pointer-events: none;
+}
+
+.robot-hologram-anchor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.robot-hologram-frame {
+  transform: translate(-50%, -50%);
+}
+
 .robot-hologram {
   position: relative;
   display: flex;
-  width: 760px;
-  height: 520px;
+  width: min(760px, calc(100vw - 48px));
+  height: min(520px, calc(100dvh - 120px));
+  min-height: min(320px, calc(100dvh - 120px));
   flex-direction: column;
   overflow: hidden;
   box-sizing: border-box;
@@ -387,7 +407,11 @@
 }
 
 @media (max-width: 760px) {
-  .robot-hologram { width: 360px; }
+  .robot-hologram {
+    width: min(360px, calc(100vw - 32px));
+    height: min(520px, calc(100dvh - 96px));
+    min-height: min(300px, calc(100dvh - 96px));
+  }
   .robot-hologram__header { min-height: 62px; padding: 0 19px; }
   .robot-hologram__messages { gap: 12px; padding: 18px 19px 14px; }
   .robot-hologram__message p { padding: 10px 12px; font-size: 15px; }
