@@ -18,6 +18,7 @@ interface GltfDocument {
   }[];
   textures: { source: number }[];
   images: { name?: string; mimeType: string; bufferView: number }[];
+  buffers: { byteLength: number }[];
   bufferViews: { byteOffset?: number; byteLength: number; byteStride?: number }[];
   animations: {
     name?: string;
@@ -117,6 +118,8 @@ describe('room model runtime contracts', () => {
     expect(image.name).toBe('room-prints');
     expect(image.mimeType).toBe('image/jpeg');
     expect(document.images.filter((item) => item.name === 'room-prints')).toHaveLength(1);
+    const view = document.bufferViews[image.bufferView];
+    expect((view.byteOffset ?? 0) + view.byteLength).toBeLessThanOrEqual(document.buffers?.[0]?.byteLength ?? Number.MAX_SAFE_INTEGER);
   });
 
   it('keeps normal maps lossless, small and separate from color textures', () => {

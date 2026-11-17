@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-export type FocusTarget = 'monitor' | 'robot' | 'corkboard';
+export type FocusTarget = 'monitor' | 'robot' | 'corkboard' | 'library';
 
 export interface FocusTargetConfig {
   center: THREE.Vector3;
@@ -33,6 +33,14 @@ export const FOCUS_TARGETS: Record<FocusTarget, FocusTargetConfig> = {
     normal: new THREE.Vector3(-1, 0, 0),
     width: 1.24,
     height: 0.88,
+    fov: 38,
+    fill: 0.82,
+  },
+  library: {
+    center: new THREE.Vector3(-3.04, 1.57, 1.71),
+    normal: new THREE.Vector3(1, 0, 0),
+    width: 3.42,
+    height: 1.56,
     fov: 38,
     fill: 0.82,
   },

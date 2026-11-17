@@ -21,7 +21,7 @@ import { projectPanelPosition } from './projection-layout';
 export type ProjectionMode = 'hidden' | HologramMode;
 const ROOM_TARGET: [number, number, number] = [0, 0.78, 0];
 const HOVER_EXIT_DELAY_MS = 280;
-type HoverTarget = Extract<FocusTarget, 'monitor' | 'robot'>;
+type HoverTarget = FocusTarget;
 
 interface RoomSceneProps {
   lang: Lang;
@@ -55,6 +55,8 @@ export default function RoomScene({
   const hoverTimers = useRef<Partial<Record<HoverTarget, number>>>({});
   const [monitorHovered, setMonitorHovered] = useState(false);
   const [robotHovered, setRobotHovered] = useState(false);
+  const [corkboardHovered, setCorkboardHovered] = useState(false);
+  const [libraryHovered, setLibraryHovered] = useState(false);
   const focus = useRoomFocus({
     camera,
     controls,
@@ -72,7 +74,12 @@ export default function RoomScene({
       delete hoverTimers.current[target];
     }
 
-    const update = target === 'monitor' ? setMonitorHovered : setRobotHovered;
+    const update = {
+      monitor: setMonitorHovered,
+      robot: setRobotHovered,
+      corkboard: setCorkboardHovered,
+      library: setLibraryHovered,
+    }[target];
     if (hovered) {
       update(true);
       return;
@@ -115,7 +122,7 @@ export default function RoomScene({
     const activeElement = document.activeElement;
     if (
       activeElement instanceof HTMLElement
-      && activeElement.closest('.room-screen-html, .robot-hologram-overlay')
+      && activeElement.closest('.room-screen-html, .robot-hologram-overlay, .room-editorial-panel')
     ) activeElement.blur();
 
     const dismissRobot = before.target === 'robot';
@@ -130,6 +137,11 @@ export default function RoomScene({
       return;
     }
     focus.finishReturn();
+    if (before.target === 'corkboard' || before.target === 'library') {
+      window.setTimeout(() => {
+        document.getElementById(`room-hotspot-${before.target}`)?.focus();
+      }, 0);
+    }
   }, [focus.finishReturn, focus.getState, focus.returnToRoom, onProjectionChange]);
 
   useEffect(() => {
@@ -181,6 +193,26 @@ export default function RoomScene({
       />
       {!focused && (
         <>
+          <RoomHotspot
+            id="corkboard"
+            label={lang === 'es' ? 'Leer mi trayectoria' : 'Read my journey'}
+            position={[3.255, 1.73, -1.16]}
+            width={1.17}
+            height={0.79}
+            hovered={corkboardHovered}
+            onHoverChange={(hovered) => setTargetHovered('corkboard', hovered)}
+            onActivate={() => focusCommand.current?.('corkboard')}
+          />
+          <RoomHotspot
+            id="library"
+            label={lang === 'es' ? 'Explorar habilidades' : 'Explore skills'}
+            position={[-2.75, 1.65, 0]}
+            width={3.5}
+            height={1.65}
+            hovered={libraryHovered}
+            onHoverChange={(hovered) => setTargetHovered('library', hovered)}
+            onActivate={() => focusCommand.current?.('library')}
+          />
           <mesh
             position={[0.76, 0.97, -1.18]}
             onClick={(event) => {
@@ -248,6 +280,96 @@ export default function RoomScene({
           <HologramPanelAnchor panelAnchorRef={panelAnchorRef} />
         </>
       )}
+    </>
+  );
+}
+
+function RoomHotspot({
+  id,
+  label,
+  position,
+  width,
+  height,
+  hovered,
+  onHoverChange,
+  onActivate,
+}: {
+  id: 'corkboard' | 'library';
+  label: string;
+  position: [number, number, number];
+  width: number;
+  height: number;
+  hovered: boolean;
+  onHoverChange: (hovered: boolean) => void;
+  onActivate: () => void;
+}) {
+  const library = id === 'library';
+  const rotation: [number, number, number] = [0, Math.PI / 2, 0];
+
+  return (
+    <>
+      <mesh
+        position={position}
+        rotation={rotation}
+        onClick={(event) => {
+          event.stopPropagation();
+          if (!isIntentionalRoomActivation(event.delta)) return;
+          onActivate();
+        }}
+        onPointerOver={(event) => {
+          event.stopPropagation();
+          document.body.style.cursor = 'pointer';
+          onHoverChange(true);
+        }}
+        onPointerOut={(event) => {
+          event.stopPropagation();
+          document.body.style.cursor = '';
+          onHoverChange(false);
+        }}
+      >
+        <planeGeometry args={[width, height]} />
+        <meshBasicMaterial
+          colorWrite={false}
+          depthWrite={false}
+          side={THREE.DoubleSide}
+          transparent
+        />
+      </mesh>
+      {hovered && (
+        <Html
+          position={[
+            position[0] + (library ? 0.12 : -0.08),
+            position[1] + height * 0.5 + 0.08,
+            position[2],
+          ]}
+          center
+          distanceFactor={12}
+          zIndexRange={[12, 0]}
+        >
+          <button
+            className="room-interaction-label"
+            type="button"
+            onPointerEnter={() => onHoverChange(true)}
+            onPointerLeave={() => onHoverChange(false)}
+            onClick={(event) => {
+              event.stopPropagation();
+              onActivate();
+            }}
+          >
+            {label}
+          </button>
+        </Html>
+      )}
+      <Html position={position} center distanceFactor={12} zIndexRange={[10, 0]}>
+        <button
+          id={`room-hotspot-${id}`}
+          className="room-object-accessible"
+          type="button"
+          onClick={onActivate}
+        >
+          {label}
+        </button>
+      </Html>
     </>
   );
 }

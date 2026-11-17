@@ -9,6 +9,7 @@ import type { FocusTarget } from './focus-targets';
 import type { RoomFocusState } from './useRoomFocus';
 import type { ProjectionMode } from './RoomScene';
 import RobotHologram from './RobotHologram';
+import RoomEditorialPanel from './RoomEditorialPanel';
 import {
   hasDismissedRoomWelcome,
   rememberRoomWelcomeDismissal,
@@ -83,7 +84,7 @@ function RoomExperienceContent({
       const target = event.target;
       if (
         target instanceof Element
-        && target.closest('.room-screen-html, .robot-hologram-overlay')
+        && target.closest('.room-screen-html, .robot-hologram-overlay, .room-editorial-panel')
       ) return;
 
       returnToRoom.current?.();
@@ -158,6 +159,14 @@ function RoomExperienceContent({
           panelAnchorRef={hologramPanelAnchor}
         />
       )}
+      {(focusState.target === 'corkboard' || focusState.target === 'library')
+        && focusState.phase === 'focused' && (
+          <RoomEditorialPanel
+            lang={lang}
+            section={focusState.target}
+            onClose={() => returnToRoom.current?.()}
+          />
+      )}
       {!sceneFailed && <RoomLoadingStatus lang={lang} />}
 
       <header className="room-header">
@@ -191,7 +200,11 @@ function RoomExperienceContent({
         <>
           <div className="room-hint" aria-label={isSpanish ? 'Controles de cámara' : 'Camera controls'}>
             <span className="room-hint__icon" aria-hidden="true">↔</span>
-            <span>{isSpanish ? 'Arrastrar para mirar alrededor' : 'Drag to look around'}</span>
+            <span>
+              {isSpanish
+                ? 'Arrastra para mirar; toca el corcho o los libros para explorar'
+                : 'Drag to look around; select the board or books to explore'}
+            </span>
           </div>
           <button
             className="room-robot-shortcut"
@@ -244,8 +257,8 @@ function RoomExperienceContent({
           </h1>
           <p className="room-welcome__copy">
             {isSpanish
-              ? 'Explora la habitación: abre el portfolio en el PC o charla con AdrBOT.'
-              : 'Explore the room: open the portfolio on the PC or chat with AdrBOT.'}
+            ? 'Explora la habitación: abre el portfolio, habla con AdrBOT o selecciona el corcho y los libros.'
+            : 'Explore the room: open the portfolio on the PC, chat with AdrBOT, or select the corkboard and books.'}
           </p>
           <div className="room-welcome__actions">
             <button type="button" onClick={() => openFromWelcome('monitor')}>

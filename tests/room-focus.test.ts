@@ -13,13 +13,15 @@ describe('room camera focus framing', () => {
     }
   });
 
-  it('approaches the side-wall corkboard from inside the room', () => {
-    const config = FOCUS_TARGETS.corkboard;
-    const position = getFocusPosition(config, 16 / 9);
+  it('approaches side-wall content from inside the room', () => {
+    for (const targetId of ['corkboard', 'library'] as const) {
+      const config = FOCUS_TARGETS[targetId];
+      const position = getFocusPosition(config, 16 / 9);
 
-    expect(position.x).toBeLessThan(config.center.x);
-    expect(position.y).toBe(config.center.y);
-    expect(position.z).toBe(config.center.z);
+      expect(position.x * config.normal.x).toBeGreaterThan(config.center.x * config.normal.x);
+      expect(position.y).toBe(config.center.y);
+      expect(position.z).toBe(config.center.z);
+    }
   });
 
   it('moves farther away when the viewport gets narrow', () => {

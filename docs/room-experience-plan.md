@@ -12,7 +12,7 @@ accepted; iteration 2 is authorized and begins after iteration 1 is delivered.
 | Iteration | Scope | Status | Planned commit |
 | --- | --- | --- | --- |
 | 1 | First-visit discovery and interaction hints | Accepted | `feat(room): add first-visit discovery and interaction hints` |
-| 2 | Career corkboard and skill library | Pending | `feat(room): add career board and skill library` |
+| 2 | Career corkboard and skill library | Accepted | `feat(room): add career board and skill library` |
 | 3 | Madrid-time lighting and panorama cycle | Pending; three photos required | `feat(room): add Madrid-time lighting and panorama cycle` |
 | 4 | AdrRoom making-of notebook | Pending | `feat(room): add the AdrRoom making-of notebook` |
 
